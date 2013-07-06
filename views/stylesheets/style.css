@@ -1,0 +1,45 @@
+#errormsg
+{
+color:red;
+}
+
+body 
+{
+	font-family: 'Yanone Kaffeesatz', serif;
+	font-size: 36px;
+	width: 8em;
+	margin-left: 1em;
+	background-image:url('http://www.datasektionen.se/images/background.png');
+}
+
+textarea:focus, input:focus {
+	border: 2px solid #F400A1;
+}
+
+label {
+	float: left;
+	text-align: center;
+	margin-right: 15px;
+	width: 100px;
+}
+
+input {
+	width: 200px;
+}
+
+#header_title
+{
+	margin-left: 0em;
+	width: 20em;
+}
+
+#login_button{
+	border: 1px solid #777777;
+	background: #F400A1;
+	color: white;
+	font: bold 11px 'Trebuchet MS';
+	padding: 4px;
+	cursor: pointer;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+}

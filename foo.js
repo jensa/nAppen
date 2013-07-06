@@ -1,16 +1,14 @@
-var http = require ('http');
-var url = require ('url');
-var requestRouter = require ("./requestRouter");
-var server = getServer ();
+var express = require('express')
+var app = express ();
+var expressValidator = require('express-validator');
+var router = require ('./requestRouter');
 
-server.listen (8000, '127.0.0.1');
+app.set('views', __dirname + '/views');
+app.set('view options', { layout: false });
 
-function getServer (){
-	function onRequest (req, res) {
-		var path = url.parse (req.url).pathname;
-		var handleRequest = requestRouter.route (path);
-		handleRequest (req, res);
-	}
-	var server = http.createServer (onRequest);
-	return server;
-}
+app.use(express.static(__dirname + '/public'));
+app.use(express.bodyParser());
+app.use(expressValidator ());
+
+router.setRoutes (app);
+app.listen(8000);

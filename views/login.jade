@@ -1,0 +1,15 @@
+﻿include base
+block loginform
+	#login_form
+		form(id="loginform", action="login", method="post")
+			#login_inputs
+				div
+					label Användarnamn
+					input(type="text", name="username", id="name", value="Namn", onclick="{this.value=''}", onblur="if(this.value==''){this.value='Namn'}")
+				div
+					label Lösenord
+					input(type="password", name="password", id="password", value="Lösenord", onclick="{this.value=''}", onblur="if(this.value==''){this.value='Lösenord'}")
+				div
+					input(type="submit", id="login_button", value="Logga in")
+		#errormsg	
+			p #{message}
