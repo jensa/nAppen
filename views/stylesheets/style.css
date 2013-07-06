@@ -38,6 +38,7 @@ input {
 	background: #F400A1;
 	color: white;
 	font: bold 11px 'Trebuchet MS';
+	margin-top: 10px;
 	padding: 4px;
 	cursor: pointer;
 	-moz-border-radius: 4px;
