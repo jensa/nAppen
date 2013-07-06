@@ -18,8 +18,8 @@ function login (req, res){
 
 function validateLogin (req, res){
 	var loginSuccessful = true;
-	req.assert('username', 'Name is required').notEmpty();           //Validate name
-    req.assert('password', 'Password is required').notEmpty();  //Validate email
+	req.assert('username', 'Name is required').notEmpty();
+    req.assert('password', 'Password is required').notEmpty();
 	var errors = req.validationErrors();
 	loginSuccessful = !errors; // TODO: auth, here. yeah.
 	if (loginSuccessful) {
