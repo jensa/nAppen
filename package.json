@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "foobear",
   "version": "0.0.0",
   "description": "en app för nØllan lol",
@@ -14,7 +14,8 @@
     "mongoose": "~3.6.14",
     "node-gyp": "~0.10.5",
     "passport": "~0.1.17",
-    "passport-local": "~0.1.6"
+    "passport-local": "~0.1.6",
+    "moment": "~2.1.0"
   },
   "devDependencies": {},
   "scripts": {

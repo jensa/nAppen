@@ -1,97 +1,72 @@
-﻿var mongoose = require('mongoose');
-var bcrypt = require('bcrypt')
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-mongoose.connect('mongodb://localhost/test');
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function () {
-	console.log ('opened db connection');
-});
-
-
-passport.use(new LocalStrategy(authUser));
-
-var userSchema = new mongoose.Schema({
-	username : String,
-	password : String
-});
-
-userSchema.pre('save', function(next) {
-	var user = this;
-
-	if(!user.isModified('password')) 
-		return next();
-	bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
-		if(err) 
-			return next(err);
-		bcrypt.hash(user.password, salt, function(err, hash) {
-			if(err) 
-				return next(err);
-			user.password = hash;
-			next();
-		});
-	});
-});
-
-var User = mongoose.model ('users', userSchema);
-
-function authUser (username, password, done) {
-	console.log ("authing:"+username+", "+password);
-//	if (username == '' || username == 'Namn')
-//		return done (null, false, {message: 'Måste fylla i användarnamnet'});
-//	if (password == '')
-//		return done (null, false, {message: 'Måste fylla i lösenordet'});
-    User.find({ username: username }).exec(function(err, user) {
-		console.log ("user:"+user+", err: "+err);
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-     // if (!user.validPassword(password)) {
-   //     return done(null, false, { message: 'Incorrect password.' });
-   //   }
-      return done(null, user);
-    });
- }
+﻿var usermanager = require('./usermanager');
 
 function setRoutes (app){
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.get ('/event', event);
+app.get ('/event', isLoggedIn, event);
 app.get ('/login', login);
-app.post ('/login', auth () );
-app.get ('/news', news);
+app.post ('/login', auth);
+app.get ('/news', isLogedIn, news);
 app.get ('/makeusr', newuser);
+app.get ('/fail', fail);
+app.get ('/DELETE', deleteall);
 app.get('/', function (req, res){ res.redirect('/login')});
 //404
 app.get('*', balls);
 }
 
+function isLoggedIn (req, res){
+	if (req.session.user != null)
+		next ();
+	else
+		res.redirect ('/login');
+}
+
+function deleteall (req, res){
+	usermanager.delAllRecords (null);
+	res.send ("dleted errthang");
+}
+
+function fail (req, res){
+	res.render ('kefft.jade', {title:'Failed', message:'alt gick till helvete'});
+}
+
 function newuser (req, res){
 	var user = req.query.user;
 	var pwd = req.query.pwd;
-	console.log ("making new user:"+user+", pass:"+pwd);
-	var newUser = new User ({username: user, password : pwd});
-	console.log ("made user");
-	newUser.save(function (err) {if (err) console.log ('Error on save!')});
-	console.log ("saved");
-	res.redirect('/event');
+	var email = req.query.email;
+	var data = {username: user, password:pwd, email:email};
+	usermanager.addNewAccount (data, function (status){
+		res.send(status);
+	});
 }
 
 function login (req, res){
-	if (req.query.msg=='failedval')
-		res.render ('login.jade', {title:'Login', message:'Ett eller flera fält tomma'});
-	else if (req.query.msg=='failedauth')
-		res.render ('login.jade', {title:'Login', message:'Fel användarnamn eller lösenord'});
-	res.render ('login.jade', {title:'Login'});
+		if (req.cookies.user == undefined || req.cookies.pass == undefined){
+			res.render('login.jade', { title: 'Login' });
+		} else{
+			usermanager.autoLogin(req.cookies.user, req.cookies.pass, function(o){
+				if (o != null){
+					req.session.user = o;
+					res.redirect('/news');
+				}	else{
+					res.render('login.jade', { title: 'Logga in' });
+				}
+			});
+		}
 }
 
-function auth (){
-	return passport.authenticate('local', { successRedirect: '/news',
-			failureRedirect: '/event',
-			failureFlash: false });
+function auth (req, res){
+		usermanager.manualLogin(req.param('username'), req.param('password'), function(e, o){
+			if (!o){
+				res.send(e, 400);
+			}else{
+				req.session.user = o;
+				if (req.param('remember-me') == 'true'){
+					res.cookie('user', o.user, { maxAge: 900000 });
+					res.cookie('pass', o.pass, { maxAge: 900000 });
+				}
+				res.render('news.jade', {title: 'Du gjorde det! du e inloggad!'});
+			}
+		});
 }
 
 function event (req, res){
