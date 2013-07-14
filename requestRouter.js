@@ -4,7 +4,7 @@ function setRoutes (app){
 app.get ('/event', isLoggedIn, event);
 app.get ('/login', login);
 app.post ('/login', auth);
-app.get ('/news', isLogedIn, news);
+app.get ('/news', isLoggedIn, news);
 app.get ('/makeusr', newuser);
 app.get ('/fail', fail);
 app.get ('/DELETE', deleteall);
@@ -13,7 +13,7 @@ app.get('/', function (req, res){ res.redirect('/login')});
 app.get('*', balls);
 }
 
-function isLoggedIn (req, res){
+function isLoggedIn (req, res, next){
 	if (req.session.user != null)
 		next ();
 	else
@@ -35,7 +35,10 @@ function newuser (req, res){
 	var email = req.query.email;
 	var data = {username: user, password:pwd, email:email};
 	usermanager.addNewAccount (data, function (status){
-		res.send(status);
+		if (status == 'success')
+			res.redirect ('/');
+		else
+			res.send (status);
 	});
 }
 
@@ -43,12 +46,13 @@ function login (req, res){
 		if (req.cookies.user == undefined || req.cookies.pass == undefined){
 			res.render('login.jade', { title: 'Login' });
 		} else{
-			usermanager.autoLogin(req.cookies.user, req.cookies.pass, function(o){
+			console.log ("username: "+req.cookies.username+", pass: "+req.cookies.password);
+			usermanager.autoLogin(req.cookies.username, req.cookies.password, function(o){
 				if (o != null){
 					req.session.user = o;
 					res.redirect('/news');
 				}	else{
-					res.render('login.jade', { title: 'Logga in' });
+					res.render('login.jade', { title: 'Logga in'});
 				}
 			});
 		}
@@ -57,14 +61,12 @@ function login (req, res){
 function auth (req, res){
 		usermanager.manualLogin(req.param('username'), req.param('password'), function(e, o){
 			if (!o){
-				res.send(e, 400);
+				res.render ('login.jade', {title: 'Login',message: 'Fel användarnamn eller lösenord'});
 			}else{
 				req.session.user = o;
-				if (req.param('remember-me') == 'true'){
-					res.cookie('user', o.user, { maxAge: 900000 });
-					res.cookie('pass', o.pass, { maxAge: 900000 });
-				}
-				res.render('news.jade', {title: 'Du gjorde det! du e inloggad!'});
+				res.cookie('username', o.username, { maxAge: 900000 });
+				res.cookie('password', o.password, { maxAge: 900000 });
+				res.redirect ('/news');
 			}
 		});
 }

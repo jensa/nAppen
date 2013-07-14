@@ -36,9 +36,10 @@ User = mongoose.model ('users', userSchema);
 
 exports.autoLogin = function(user, pass, callback){
 	User.findOne({username:user}, function(e, o) {
+		console.log ("checking username "+user);
 	if (o){
-		o.pass == pass ? callback(o) : callback(null);
-	}	else{
+		o.password == pass ? callback(o) : callback(null);
+	}else{
 		callback(null);
 	}
 	});
@@ -62,9 +63,9 @@ exports.manualLogin = function(user, pass, callback){
 
 /* record insertion, update & deletion methods */
 
+/** callback returns 'success' on success */
 exports.addNewAccount = function(newData, callback){
 	User.findOne({username:newData.username}, function(e, o) {
-		console.log ("Found one");
 		if (o){
 			callback('username-taken');
 		}else{
@@ -80,7 +81,7 @@ exports.addNewAccount = function(newData, callback){
 												});
 						newUser.save (function(error, user){
 							if (!error)
-								callback ("success saving user");
+								callback ("success");
 							else
 								callback ("failed to save user:"+user.username);
 						});
