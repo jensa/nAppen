@@ -6,11 +6,18 @@ app.get ('/login', login);
 app.post ('/login', auth);
 app.get ('/news', isLoggedIn, news);
 app.get ('/makeusr', newuser);
+app.get ('/logout', logout);
 app.get ('/fail', fail);
 app.get ('/DELETE', deleteall);
 app.get('/', function (req, res){ res.redirect('/login')});
 //404
 app.get('*', balls);
+}
+
+function logout (req, res){
+		res.clearCookie('username');
+		res.clearCookie('password');
+		req.session.destroy(function(e){ res.redirect('/');		});
 }
 
 function isLoggedIn (req, res, next){
@@ -43,7 +50,7 @@ function newuser (req, res){
 }
 
 function login (req, res){
-		if (req.cookies.user == undefined || req.cookies.pass == undefined){
+		if (req.cookies.username == undefined || req.cookies.password == undefined){
 			res.render('login.jade', { title: 'Login' });
 		} else{
 			console.log ("username: "+req.cookies.username+", pass: "+req.cookies.password);
