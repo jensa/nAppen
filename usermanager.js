@@ -7,16 +7,7 @@ var dbPort = 27017;
 var dbHost = 'localhost';
 var dbName = 'test';
 
-/* establish the database connection 
-
-var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}), {w: 1});
-db.open(function(e, d){
-	if (e) {
-		console.log(e);
-	}	else{
-		console.log('connected to database :: ' + dbName);
-	}
-});*/
+/* establish the database connection */
 
 mongoose.connect('mongodb://localhost/test');
 var db = mongoose.connection;
@@ -28,7 +19,8 @@ db.once('open', function () {
 var userSchema = new mongoose.Schema({
 		username : String,
 		password : String,
-		email : String
+		email : String,
+		admin : Boolean
 });
 User = mongoose.model ('users', userSchema);
 
@@ -36,7 +28,6 @@ User = mongoose.model ('users', userSchema);
 
 exports.autoLogin = function(user, pass, callback){
 	User.findOne({username:user}, function(e, o) {
-		console.log ("checking username "+user);
 	if (o){
 		o.password == pass ? callback(o) : callback(null);
 	}else{
@@ -64,7 +55,7 @@ exports.manualLogin = function(user, pass, callback){
 /* record insertion, update & deletion methods */
 
 /** callback returns 'success' on success */
-exports.addNewAccount = function(newData, callback){
+function addNewAccount(newData, callback){
 	User.findOne({username:newData.username}, function(e, o) {
 		if (o){
 			callback('username-taken');
@@ -92,29 +83,46 @@ exports.addNewAccount = function(newData, callback){
 	});
 }
 
-exports.updateAccount = function(newData, callback)
+exports.addNewAccount = addNewAccount;
+
+exports.createOrUpdate = function createOrUpdate (data, callback){
+	console.log ("updating with admin="+data.admin);
+	User.findOne ({username:data.username}, function (e, o){
+		if (o)
+			updateAccount (data, callback);
+		else
+			addNewAccount (data, callback);
+	});
+}
+
+function updateAccount(newData, callback)
 {
 	User.findOne({username:newData.username}, function(e, o){
-		o.username = newData.name;
+		o.username = newData.username;
 		o.email = newData.email;
+		o.admin = newData.admin;
 		if (newData.password == ''){
-			User.save(o, {safe: true}, function(err) {
+			o.save(function(err) {
 				if (err) 
 					callback(err);
 				else 
-					callback(null, o);
+					callback('success');
 			});
 		}else{
-			bcrypt.hash(newData.pass, 8, function(err, hash) {
-				o.pass = hash;
-				User.save(o, {safe: true}, function(err) {
-					if (err) callback(err);
-					else callback(null, o);
+			bcrypt.hash(newData.password, 8, function(err, hash) {
+				o.password = hash;
+				o.save(function(err) {
+					if (err) 
+						callback(err);
+					else 
+						callback('success');
 				});
 			});
 		}
 	});
 }
+exports.updateAccount = updateAccount;
+
 
 exports.updatePassword = function(email, newPass, callback){
 	User.findOne({email:email}, function(e, o){
@@ -154,4 +162,5 @@ var validatePassword = function(plainPass, hashedPass, callback)
 {
 	bcrypt.compare(plainPass, hashedPass, callback);
 }
+
 
