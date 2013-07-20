@@ -5,7 +5,7 @@ app.get ('/event', isLoggedIn, eventHandler);
 app.get ('/login', login);
 app.post ('/login', auth);
 app.get ('/news', isLoggedIn, news);
-app.get ('/makeuser', isLoggedIn, user);
+app.get ('/makeuser', user);
 app.get ('/admin', isLoggedIn, adminRole, admin);
 app.get ('/logout', logout);
 app.get ('/createEvent', isLoggedIn, adminRole, createEvent);
