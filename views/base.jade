@@ -1,15 +1,20 @@
 ﻿
-title=title
+title="POSTEn - " + title
 link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz', type='text/css')
 include stylesheets/style.css
 block content
 	#header_title
-		p POSTEn - POrtabelt STödsystEm för n0llan
-	#linkbar
-		tr
-			td 
-				a(href='/event') Event
-			td
-				a(href='/news') Nyheter
-			td
-				a(href='/logout') Logga ut
+		h1 POSTEn - POrtabelt STödsystEm för n0llan
+	if (loggedin)
+		#linkbar
+			tr
+				td 
+					a(href='/event') Event
+				td
+					a(href='/news') Nyheter
+				td
+					a(href='/logout') Logga ut
+				if (adminrole)
+					td
+						a(href='/admin') admin
+						

@@ -16,6 +16,7 @@ db.once('open', function () {
 	console.log ('opened db connection');
 });
 
+/* Schema definitions */
 var userSchema = new mongoose.Schema({
 		username : String,
 		password : String,
@@ -23,6 +24,14 @@ var userSchema = new mongoose.Schema({
 		admin : Boolean
 });
 User = mongoose.model ('users', userSchema);
+
+var eventSchema = new mongoose.Schema({
+	title : String,
+	description : String,
+	url : Number,
+});
+Event = mongoose.model ('events', eventSchema);
+
 
 /* login validation methods */
 
@@ -161,6 +170,69 @@ exports.delAllRecords = function(callback)
 var validatePassword = function(plainPass, hashedPass, callback)
 {
 	bcrypt.compare(plainPass, hashedPass, callback);
+}
+
+exports.getEvents = function (callback){
+	Event.find ({}, function (e, o){
+		console.log ("objects found: "+o);
+		if (!e)
+			callback (o);
+	});
+}
+
+exports.addEvent = function (ev, callback){
+	getNextEventID (function (id){
+		var nextID = id +1;
+		var newEvent = new Event ({
+							title: ev.title,
+							description : ev.description,
+							url: nextID
+						});
+		newEvent.save (function (error, evenz){
+			if (!error)
+				callback ("success");
+			else if (!evenz)
+				callback("event undefined?" + ev+".error: "+error);
+			else
+				callback ("failed to save event: "+error);
+		});
+	});
+			
+}
+
+function getNextEventID (callback){
+	Event.find({},'url',{
+							skip:0,
+							limit:10,
+							sort:{
+									url: -1 //descending
+								}
+							}, 
+							function(err,latestEventUrls){
+								console.log ("latest eventurl:"+latestEventUrls[0].url);
+								if (latestEventUrls.length == 0)
+									callback (-1);
+								else
+								callback (latestEventUrls[0].url);
+							});
+}
+
+/*
+function getNextEventID (callback){
+	Event.find({},'url',function(err,latestEventUrls){
+								if (latestEventUrls.length == 0)
+									callback (-1);
+								latestEventUrls.sort(function(a,b){return b-a}); // sort descending
+								console.log (latestEventUrls[0]);
+								callback (latestEventUrls[0]);
+							});
+}
+*/
+
+function EventObj (title, desc, url){
+	this.title = title;
+	this.desc = desc;
+	this.url = url;
 }
 
 

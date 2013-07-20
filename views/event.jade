@@ -1,1 +1,8 @@
 include base
+include buttonscripts
+#eventflow
+	each event in events
+		#eventblock
+			h2 #{event.title}
+			p #{event.description}
+		

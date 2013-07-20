@@ -3,33 +3,33 @@
   "version": "0.0.0",
   "description": "en app för nØllan lol",
   "main": "foo.js",
-  "dependencies": {
-    "bcrypt": "~0.7.6",
-    "connect-flash": "~0.1.1",
-    "connect-mongo": "~0.3.3",
-    "express": "~3.3.3",
-    "express-validator": "~0.6.0",
-    "jade": "~0.32.0",
-    "mongodb": "~1.3.11",
-    "mongoose": "~3.6.14",
-    "node-gyp": "~0.10.5",
-  },
+  "dependencies": 	{
+					"bcrypt": "~0.7.6",
+					"connect-flash": "~0.1.1",
+					"connect-mongo": "~0.3.3",
+					"express": "~3.3.3",
+					"express-validator": "~0.6.0",
+					"jade": "~0.32.0",
+					"mongodb": "~1.3.11",
+					"mongoose": "~3.6.14",
+					"node-gyp": "~0.10.5",
+					},
   "devDependencies": {},
-  "scripts": {
-    "test": "foobear"
-  },
+  "scripts": 	{
+				"test": "foobear"
+				},
   "repository": {
-    "type": "git",
-    "url": "git://github.com/jensa/foobear.git"
-  },
-  "keywords": [
-    "sprit"
-  ],
+					"type": "git",
+					"url": "git://github.com/jensa/foobear.git"
+				},
+  "keywords": 	[
+					"sprit"
+				],
   "author": "Jens Arvidsson, Fredrik Bystam",
   "license": "BSD",
   "readmeFilename": "README.md",
   "gitHead": "79af7cdb0978b4d647766f2376756a7713595ff7",
-  "bugs": {
-    "url": "https://github.com/jensa/foobear/issues"
-  }
+  "bugs": 	{
+				"url": "https://github.com/jensa/foobear/issues"
+			}
 }

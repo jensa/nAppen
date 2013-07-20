@@ -1,13 +1,14 @@
-﻿var usermanager = require('./usermanager');
+﻿var database = require('./database');
 
 function setRoutes (app){
-app.get ('/event', isLoggedIn, event);
+app.get ('/event', isLoggedIn, eventHandler);
 app.get ('/login', login);
 app.post ('/login', auth);
 app.get ('/news', isLoggedIn, news);
-app.get ('/usr', isLoggedIn, user);
+app.get ('/makeuser', isLoggedIn, user);
 app.get ('/admin', isLoggedIn, adminRole, admin);
 app.get ('/logout', logout);
+app.get ('/createEvent', isLoggedIn, adminRole, createEvent);
 app.get ('/fail', fail);
 app.get ('/DELETE', isLoggedIn, deleteall);
 app.get('/', function (req, res){ res.redirect('/login')});
@@ -15,8 +16,22 @@ app.get('/', function (req, res){ res.redirect('/login')});
 app.get('*', balls);
 }
 
+function createEvent (req, res){
+	var desc = req.param('eventDescription');
+	var title = req.param ('eventTitle');
+	var eventc = {
+					description : desc,
+					title: title,
+					url : -2
+					};
+	database.addEvent (eventc, function (outcome){
+		console.log (outcome);
+		res.render ('adminview.jade', {title: 'Admin', message: outcome});
+	});
+}
+
 function admin(req, res){
-	res.send ("ADMIN ACCESS");
+	res.render ('adminview.jade', {title:'Admin', loggedin:true, adminrole:true});
 }
 
 function logout (req, res){
@@ -41,12 +56,12 @@ function isLoggedIn (req, res, next){
 }
 
 function deleteall (req, res){
-	usermanager.delAllRecords (null);
+	database.delAllRecords (null);
 	res.send ("dleted errthang");
 }
 
 function fail (req, res){
-	res.render ('kefft.jade', {title:'Failed', message:'alt gick till helvete'});
+	res.render ('kefft.jade', {title:'Failed', message:'allt gick till helvete'});
 }
 
 function user (req, res){
@@ -57,9 +72,9 @@ function user (req, res){
 	if (req.query.admin == 'true')
 		admin = true;
 	var data = {username: user, password:pwd, email:email, admin:admin};
-	usermanager.createOrUpdate (data, function (status){
+	database.createOrUpdate (data, function (status){
 		if (status == 'success')
-			res.redirect ('/');
+			res.render ('madeuser.jade', {title:'Användare skapad',user:user, email:email, admin:admin, loggedin:true});
 		else
 			res.send (status);
 	});
@@ -69,7 +84,7 @@ function login (req, res){
 		if (req.cookies.username == undefined || req.cookies.password == undefined){
 			res.render('login.jade', { title: 'Login' });
 		} else{
-			usermanager.autoLogin(req.cookies.username, req.cookies.password, function(o){
+			database.autoLogin(req.cookies.username, req.cookies.password, function(o){
 				if (o != null){
 					req.session.user = o;
 					res.redirect('/news');
@@ -81,7 +96,7 @@ function login (req, res){
 }
 
 function auth (req, res){
-		usermanager.manualLogin(req.param('username'), req.param('password'), function(e, o){
+		database.manualLogin(req.param('username'), req.param('password'), function(e, o){
 			if (!o){
 				res.render ('login.jade', {title: 'Login',message: 'Fel användarnamn eller lösenord'});
 			}else{
@@ -93,12 +108,35 @@ function auth (req, res){
 		});
 }
 
-function event (req, res){
-	res.render ('event.jade', {title:'Events'});
+function eventHandler (req, res){
+	var eventArray = new Array ();
+	database.getEvents (function (events){
+		for (es in events){
+			var e = events[es];
+			console.log ("event added: "+e);
+			var anEvent = 	{
+								title: e.title, 
+								description : e.description, 
+								url : e.url
+							};
+			eventArray.push (anEvent);
+		}
+		res.render ('event.jade', {title:'Events', loggedin:true, adminrole:getAdminRole (req), events:eventArray});
+	});
+	
 }
 
 function news (req, res){
-	res.render ('news.jade', {title:'News'});
+	res.render ('news.jade', {title:'News', loggedin:true, adminrole:getAdminRole (req)});
+}
+
+function getAdminRole (req){
+	var usr = req.session.user;
+	if (usr){
+		if (usr.admin)
+			return true;
+	}
+	return false;
 }
 
 function balls (req, res){

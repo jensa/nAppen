@@ -1,0 +1,16 @@
+include base
+#adminalert
+	h1 #{message}
+#createEvent
+	h2 Skapa Event
+	form(id="createEventForm", action="createEvent", method="get")
+		div
+			label title
+			input(type="text", name="eventTitle")
+		div
+			label description
+			input(type="text", name="eventDescription")
+		div
+			label submitevent
+			input(type="submit", name"eventSubmit")
+		

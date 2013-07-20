@@ -6,10 +6,16 @@ color:red;
 body 
 {
 	font-family: 'Yanone Kaffeesatz', serif;
-	font-size: 36px;
-	width: 8em;
+	width: 12em;
 	margin-left: 1em;
 	background-image:url('http://www.datasektionen.se/images/background.png');
+}
+
+h1
+{
+	width: 250px;
+	font-size: 24px;
+	font-weight: normal;
 }
 
 textarea:focus, input:focus {
@@ -24,18 +30,19 @@ label {
 }
 
 input {
-	width: 200px;
+	width: 250px;
 }
 
 #linkbar
 {
-	font-size: 14px;
+	font-size: 18px;
 	background: #F400A1;
 	color: white;
 	text-decoration: none;
-	width: 8em;
+	width: 250px;
 	
 }
+
 a:link 
 {
 	text-decoration:none;
@@ -63,6 +70,11 @@ a:active
 #header_title
 {
 	margin-left: 0em;
+}
+
+#eventblock
+{
+	border: 3px solid #C0FFEE
 }
 
 #login_button{
