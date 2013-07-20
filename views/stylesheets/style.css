@@ -88,3 +88,8 @@ a:active
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 }
+
+select
+{
+	width: 250px;
+}

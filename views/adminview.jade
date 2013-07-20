@@ -1,16 +1,38 @@
-include base
+﻿include base
 #adminalert
 	h1 #{message}
 #createEvent
 	h2 Skapa Event
 	form(id="createEventForm", action="createEvent", method="get")
 		div
-			label title
+			label Eventets namn
 			input(type="text", name="eventTitle")
 		div
-			label description
+			label Eventets beskrivning
 			input(type="text", name="eventDescription")
 		div
 			label submitevent
-			input(type="submit", name"eventSubmit")
+			input(type="submit", name="eventSubmit", value="Skapa")
+		
+		
+#createUser
+	h2 Skapa Användare
+	form(id="createUserForm", action="makeuser", method="post")
+		div
+			label Användarnamn
+			input(type="text", name="user")
+		div
+			label Lösenord
+			input(type="text", name="pwd")
+		div
+			label Email
+			input(type="text", name="email")
+		div
+			label Admin?
+			select(name="admin")
+				option(value="true") Sant
+				option(value="false") Falskt
+		div
+			input(type="submit", name="userSubmit", value="Skapa")
+		
 		

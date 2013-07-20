@@ -5,7 +5,7 @@ app.get ('/event', isLoggedIn, eventHandler);
 app.get ('/login', login);
 app.post ('/login', auth);
 app.get ('/news', isLoggedIn, news);
-app.get ('/makeuser', user);
+app.post ('/makeuser', user);
 app.get ('/admin', isLoggedIn, adminRole, admin);
 app.get ('/logout', logout);
 app.get ('/createEvent', isLoggedIn, adminRole, createEvent);
@@ -65,17 +65,25 @@ function fail (req, res){
 }
 
 function user (req, res){
-	var user = req.query.user;
-	var pwd = req.query.pwd;
-	var email = req.query.email;
+	var user = req.param ('user');
+	var pwd = req.param('pwd');
+	var email = req.param('email');
 	var admin = false;
-	if (req.query.admin == 'true')
+	if (req.param('admin') == 'true')
 		admin = true;
 	var data = {username: user, password:pwd, email:email, admin:admin};
 	database.createOrUpdate (data, function (status){
-		if (status == 'success')
-			res.render ('madeuser.jade', {title:'Användare skapad',user:user, email:email, admin:admin, loggedin:true});
-		else
+		if (status == 'success'){
+			console.log ("user made: name: "+user+", pass: "+ pwd+", email: "+email+", admin: "+admin);
+			res.render ('madeuser.jade', {	title:'Användare skapad',
+											user:user, 
+											email:email, 
+											password: pwd,
+											admin:admin, 
+											loggedin:true, 
+											adminrole:getAdminRole (req)
+										});
+		}else
 			res.send (status);
 	});
 }
