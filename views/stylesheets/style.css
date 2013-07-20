@@ -43,12 +43,12 @@ input {
 	
 }
 
-a:link 
+#linkbar a:link 
 {
 	text-decoration:none;
 	color: #FFFBFF;
 }
-a:visited 
+#linkbar a:visited 
 {
 	text-decoration:none;
 	color: #FFFBFF;
@@ -58,11 +58,11 @@ a:visited
     -1px 1px 0 #000,
     1px 1px 0 #000; 
 }
-a:hover 
+#linkbar a:hover 
 {
 	text-decoration:none;
 }
-a:active 
+#linkbar a:active 
 {
 	text-decoration:none;
 }

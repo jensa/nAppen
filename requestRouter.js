@@ -5,12 +5,12 @@ app.get ('/event', isLoggedIn, eventHandler);
 app.get ('/login', login);
 app.post ('/login', auth);
 app.get ('/news', isLoggedIn, news);
-app.post ('/makeuser', user);
+app.post ('/makeuser', isLoggedIn, adminRole, user);
 app.get ('/admin', isLoggedIn, adminRole, admin);
 app.get ('/logout', logout);
 app.get ('/createEvent', isLoggedIn, adminRole, createEvent);
 app.get ('/fail', fail);
-app.get ('/DELETE', isLoggedIn, deleteall);
+app.get ('/DELETE', isLoggedIn, adminRole, deleteall);
 app.get('/', function (req, res){ res.redirect('/login')});
 //404
 app.get('*', balls);
@@ -26,12 +26,12 @@ function createEvent (req, res){
 					};
 	database.addEvent (eventc, function (outcome){
 		console.log (outcome);
-		res.render ('adminview.jade', {title: 'Admin', message: outcome});
+		renderPage (req, res, 'adminview.jade', {title: 'Admin', message: outcome});
 	});
 }
 
 function admin(req, res){
-	res.render ('adminview.jade', {title:'Admin', loggedin:true, adminrole:true});
+	renderPage (req, res, 'adminview.jade', {title:'Admin'});
 }
 
 function logout (req, res){
@@ -57,11 +57,22 @@ function isLoggedIn (req, res, next){
 
 function deleteall (req, res){
 	database.delAllRecords (null);
-	res.send ("dleted errthang");
+	createUser ("jerre", "jerre", "jensarv@gmail.com", true, function(data){
+		renderPage (req, res, 'login.jade', 	{
+								title:"Logga in", 
+								message:"Tog bort hela databasen. "+
+										"Återskapade adminkontot:" +
+										"Namn: "+data.user + 
+										"Pass: "+data.password +
+										"Email: "+data.email +
+										"Admin: "+data.admin
+								});
+	});
+	
 }
 
 function fail (req, res){
-	res.render ('kefft.jade', {title:'Failed', message:'allt gick till helvete'});
+	renderPage (req, res, 'kefft.jade', {title:'Failed', message:'allt gick till helvete'});
 }
 
 function user (req, res){
@@ -71,42 +82,54 @@ function user (req, res){
 	var admin = false;
 	if (req.param('admin') == 'true')
 		admin = true;
+	createUser (user, pwd, email, admin, function (data){
+		if (data.error)
+			renderPage (req, res, 'madeuser', 
+						{
+							title: "Misslyckades att skapa användare", 
+							error:data.error
+						});
+		else
+			renderPage (req, res, 'madeuser.jade', data);
+	});
+}
+
+function createUser (user, pwd, email, admin, callback){
 	var data = {username: user, password:pwd, email:email, admin:admin};
 	database.createOrUpdate (data, function (status){
 		if (status == 'success'){
-			console.log ("user made: name: "+user+", pass: "+ pwd+", email: "+email+", admin: "+admin);
-			res.render ('madeuser.jade', {	title:'Användare skapad',
+			callback ({	title:'Användare skapad',
 											user:user, 
 											email:email, 
 											password: pwd,
-											admin:admin, 
-											loggedin:true, 
-											adminrole:getAdminRole (req)
+											admin:admin,
 										});
 		}else
-			res.send (status);
+			callback ({error:"Gick inte att skapa användare"});
 	});
 }
 
 function login (req, res){
 		if (req.cookies.username == undefined || req.cookies.password == undefined){
-			res.render('login.jade', { title: 'Login' });
+			res.render('login.jade', { title: 'Logga in' });
 		} else{
 			database.autoLogin(req.cookies.username, req.cookies.password, function(o){
 				if (o != null){
 					req.session.user = o;
 					res.redirect('/news');
 				}	else{
-					res.render('login.jade', { title: 'Logga in'});
+					renderPage (req, res, 'login.jade', {title: 'Logga in'});
 				}
 			});
 		}
 }
 
 function auth (req, res){
-		database.manualLogin(req.param('username'), req.param('password'), function(e, o){
+		database.manualLogin(req.param('username'), req.param('password'), 
+		function(e, o){
 			if (!o){
-				res.render ('login.jade', {title: 'Login',message: 'Fel användarnamn eller lösenord'});
+				renderPage (req, res, 'login.jade',  
+							{title: 'Login',message: 'Fel användarnamn eller lösenord'});
 			}else{
 				req.session.user = o;
 				res.cookie('username', o.username, { maxAge: 900000 });
@@ -121,7 +144,6 @@ function eventHandler (req, res){
 	database.getEvents (function (events){
 		for (es in events){
 			var e = events[es];
-			console.log ("event added: "+e);
 			var anEvent = 	{
 								title: e.title, 
 								description : e.description, 
@@ -129,13 +151,13 @@ function eventHandler (req, res){
 							};
 			eventArray.push (anEvent);
 		}
-		res.render ('event.jade', {title:'Events', loggedin:true, adminrole:getAdminRole (req), events:eventArray});
+		renderPage (req, res, 'event.jade', {title:'Events', events:eventArray});
 	});
 	
 }
 
 function news (req, res){
-	res.render ('news.jade', {title:'News', loggedin:true, adminrole:getAdminRole (req)});
+	renderPage (req, res, 'news.jade', {title:'News'})
 }
 
 function getAdminRole (req){
@@ -151,5 +173,15 @@ function balls (req, res){
 	res.writeHeader (404, {"Content-type":"text/html"});
 	res.end ("<html><body bgcolor=#F400A1><h3><center>BORTA!<br><img src='https://sphotos-b.xx.fbcdn.net/hphotos-prn2/p480x480/969566_549584988426424_342740630_n.jpg'></center></h3></body></html>");
 }
+
+
+function renderPage (req, res, page, options){
+	if (req.session.user)
+		options.loggedin = true;
+	if (getAdminRole (req))
+		options.adminrole = true;
+	res.render (page, options);
+}
+
 
 exports.setRoutes = setRoutes;

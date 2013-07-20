@@ -77,7 +77,8 @@ function addNewAccount(newData, callback){
 						var newUser = new User ({	
 													username : newData.username, 
 													password : hash, 
-													email : newData.email
+													email : newData.email,
+													admin : newData.admin
 												});
 						newUser.save (function(error, user){
 							if (!error)
@@ -165,6 +166,7 @@ exports.validateResetLink = function(email, passHash, callback){
 exports.delAllRecords = function(callback)
 {
 	User.remove({}, callback); // reset User collection for testing //
+	Event.remove({}, callback);
 }
 
 var validatePassword = function(plainPass, hashedPass, callback)
@@ -209,30 +211,18 @@ function getNextEventID (callback){
 								}
 							}, 
 							function(err,latestEventUrls){
-								console.log ("latest eventurl:"+latestEventUrls[0].url);
 								if (latestEventUrls.length == 0)
 									callback (-1);
-								else
-								callback (latestEventUrls[0].url);
+								else{
+									console.log ("latest eventurl:"+latestEventUrls[0].url);
+									callback (latestEventUrls[0].url);
+								}
 							});
 }
-
-/*
-function getNextEventID (callback){
-	Event.find({},'url',function(err,latestEventUrls){
-								if (latestEventUrls.length == 0)
-									callback (-1);
-								latestEventUrls.sort(function(a,b){return b-a}); // sort descending
-								console.log (latestEventUrls[0]);
-								callback (latestEventUrls[0]);
-							});
-}
-*/
 
 function EventObj (title, desc, url){
 	this.title = title;
 	this.desc = desc;
 	this.url = url;
 }
-
 
