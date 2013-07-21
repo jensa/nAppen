@@ -22,16 +22,22 @@ textarea:focus, input:focus {
 }
 
 label {
-	float: left;
+	display: block;
 	text-align: left;
-	margin-right: 15px;
+	margin-right: 20px;
 }
 
+/* make inputs wide by default, if we're on a browser corrent them with JQuery*/
 input {
 	width: 100%;
 }
 
 textarea
+{
+	width: 100%;
+}
+
+select
 {
 	width: 100%;
 }
@@ -92,7 +98,3 @@ textarea
 	-webkit-border-radius: 4px;
 }
 
-select
-{
-	width: 100%;
-}

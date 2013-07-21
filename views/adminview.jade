@@ -1,60 +1,60 @@
-﻿include base
-#adminalert
-	h1 #{message}
-#createEvent
-	h2 Skapa Event
-	form(id="createEventForm", action="createEvent", method="get")
-		div
-			label Eventets namn
-			input(type="text", name="eventTitle")
-		div
-			label Eventets beskrivning
-			textarea(name="eventDescription")
-		div
-			input(type="submit", name="eventSubmit", value="Skapa")
-		
-		
-#createUser
-	h2 Skapa Användare
-	form(id="createUserForm", action="makeuser", method="post")
-		div
-			label Användarnamn
-			input(type="text", name="user")
-		div
-			label Lösenord
-			input(type="text", name="pwd")
-		div
-			label Email
-			input(type="text", name="email")
-		div
-			label n0llegrupp
-			select(name="group")
-				option(value="A") A
-				option(value="B") B
-				option(value="C") C
-				option(value="D") D
-				option(value="E") E
-				option(value="F") F
-				option(value="G") G
-				option(value="H") H
-				option(value="I") I
-				option(value="J") J
-				option(value="K") K
-				option(value="L") L
-				option(value="M") M
-				option(value="ALL") Alla (admin)
-
-		div
-			label Admin?
-			select(name="admin")
-				option(value="true") Sant
-				option(value="false") Falskt
-		div
-			input(type="submit", name="userSubmit", value="Skapa")
-#deleteeverything
-	h2 Ta bort allt från databasen
-	form(id="deleteeverything", action="DELETE", method="get")
-		div
-			input(type="submit", name="deleteSubmit", value="TA BORT ALLT")
-
-		
+﻿extends base
+block flow
+	#adminalert
+		h1 #{message}
+	#createEvent
+		h2 Skapa Event
+		form(id="createEventForm", action="createEvent", method="get")
+			div
+				label Eventets namn
+				input(type="text", name="eventTitle")
+			div
+				label Eventets beskrivning
+				textarea(name="eventDescription")
+			div
+				input(type="submit", name="eventSubmit", value="Skapa")
+			
+			
+	#createUser
+		h2 Skapa Användare
+		form(id="createUserForm", action="makeuser", method="post")
+			div
+				label Användarnamn
+				input(type="text", name="user")
+			div
+				label Lösenord
+				input(type="text", name="pwd")
+			div
+				label Email
+				input(type="text", name="email")
+			div
+				label n0llegrupp
+				select(name="group")
+					option(value="A") A
+					option(value="B") B
+					option(value="C") C
+					option(value="D") D
+					option(value="E") E
+					option(value="F") F
+					option(value="G") G
+					option(value="H") H
+					option(value="I") I
+					option(value="J") J
+					option(value="K") K
+					option(value="L") L
+					option(value="M") M
+					option(value="ALL") Alla (admin)
+			div
+				label Admin?
+				select(name="admin")
+					option(value="true") Sant
+					option(value="false") Falskt
+			div
+				input(type="submit", name="userSubmit", value="Skapa")
+	#deleteeverything
+		h2 Ta bort allt från databasen
+		form(id="deleteeverything", action="DELETE", method="get")
+			div
+				input(type="submit", name="deleteSubmit", value="TA BORT ALLT")
+	
+			
