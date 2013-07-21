@@ -88,7 +88,8 @@ function addNewAccount(newData, callback){
 													username : newData.username, 
 													password : hash, 
 													email : newData.email,
-													admin : newData.admin
+													admin : newData.admin,
+													group : newData.group
 												});
 						newUser.save (function(error, user){
 							if (!error)

@@ -24,30 +24,39 @@ exports.handleCreateUserRequest = function (req, res){
 	var user = req.param ('user');
 	var pwd = req.param('pwd');
 	var email = req.param('email');
+	var group = req.param('group');
 	var admin = false;
 	if (req.param('admin') == 'true')
 		admin = true;
-	createUser (user, pwd, email, admin, function (data){
+	createUser (user, pwd, email, group, admin, function (data){
 		if (data.error)
-			helper.renderPage (req, res, 'madeuser', 
+			helper.renderPage (req, res, 'adminview.jade', 
 						{
 							title: "Misslyckades att skapa användare", 
-							error:data.error
+							message:data.error
 						});
 		else
-			helper.renderPage (req, res, 'madeuser.jade', data);
+			helper.renderPage (req, res, 'adminview.jade', {
+											title: "Admin",
+											message:"Skapade Användare:<br>"+
+													"användarnamn: "+data.user+
+													"lösenord: "+data.password+
+													"email: "+data.email+
+													"grupp: "+data.group+
+													"admin: "+data.admin});
 	});
 }
 
-function createUser (user, pwd, email, admin, callback){
-	var data = {username: user, password:pwd, email:email, admin:admin};
+function createUser (user, pwd, email, grp, admin, callback){
+	var data = {username: user, password:pwd, email:email, group:grp, admin:admin};
 	database.createOrUpdate (data, function (status){
 		if (status == 'success'){
 			callback ({	title:'Användare skapad',
 											user:user, 
 											email:email, 
 											password: pwd,
-											admin:admin,
+											group: grp,
+											admin:admin
 										});
 		}else
 			callback ({error:"Gick inte att skapa användare"});
