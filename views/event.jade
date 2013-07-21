@@ -1,9 +1,10 @@
-include base
-include buttonscripts
-#eventflow
-	each event in events
-		#eventblock
-			h2 #{event.title}
-			p #{event.description}
-			a(href='/event' + "?eventID=" + event.url) Länk
-		
+extends base
+block flow
+	#eventflow
+		each event in events
+			#eventblock
+				h2 #{event.title}
+				p #{event.description}
+				a(href='/event' + "?eventID=" + event.url)
+block scripts
+	include buttonscripts
