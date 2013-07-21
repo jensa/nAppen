@@ -42,7 +42,7 @@ exports.createEvent = function (req, res){
 
 // Called from GET /event
 exports.handleEventRequest = function (req, res){
-	var eventID = req.param (eventID);
+	var eventID = req.query.eventID
 	if (eventID){
 		showEvent (req, res, eventID);
 	} else{
@@ -70,6 +70,8 @@ function showEvent (req, res, eventID){
 	var userGroup = req.session.user.group;
 	database.getEvent (eventID, function (err, event){
 		if (err)
+			listEvents (req, res, err);
+		if (!event)
 			listEvents (req, res, err);
 		if (event.group != userGroup)
 			listEvents (req, res, 'Du har inte access till det valda eventet');

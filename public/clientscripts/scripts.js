@@ -1,8 +1,14 @@
 $(".eventblock").click(function(){
 		$(this).css ("background", "#F400A1");
-		window.location=$(this).find("a").attr("href"); 
+		window.location=$(this).find("a").attr("href");
 		return false;
-	});
+});
+
+
+
+$(".eventblock").load (function (){
+	$(this).css ("background", "");
+});
 
 $(document).ready(function (){
 	resizeCss ();
@@ -11,6 +17,10 @@ $(document).ready(function (){
 $(window).resize(function() {
 	resizeCss ();
 });
+
+function resetColors (){
+
+}
 
 function resizeCss (){
 	var width = $(window).width();

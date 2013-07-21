@@ -29,7 +29,7 @@ User = mongoose.model ('users', userSchema);
 var eventSchema = new mongoose.Schema({
 	title : String,
 	description : String,
-	url : Number,
+	url : String,
 	text : String,
 	group : String
 
@@ -198,50 +198,49 @@ exports.getEvents = function (usergroup, callback){
 }
 
 exports.getEvent = function (url, callback){
-	Event.findOne ({url:url}, function (e, o){
-		if (e)
-			callback (e);
-		callback (o);
-	});
+	Event.findOne ({url:url}, callback);
 }
 
 exports.addEvent = function (ev, callback){
-	getNextEventID (function (id){
-		var nextID = id +1;
-		var newEvent = new Event ({
-							title: ev.title,
-							description : ev.description,
-							url: nextID,
-							text: ev.text,
-							group: ev.group
-						});
-		newEvent.save (function (error, evenz){
-			if (!error)
-				callback ("success");
-			else if (!evenz)
-				callback("event undefined?" + ev+".error: "+error);
-			else
-				callback ("failed to save event: "+error);
-		});
+	getNewEventURL (ev, function (err, url){
+		if (err){
+			callback ("couldnt create hash");
+		} else {
+			var newEvent = new Event ({
+				title: ev.title,
+				description : ev.description,
+				url: url,
+				text: ev.text,
+				group: ev.group
+			});
+			newEvent.save (function (error, evenz){
+				if (!error)
+					callback ("success");
+				else if (!evenz)
+					callback("event undefined?" + ev+".error: "+error);
+				else
+					callback ("failed to save event: "+error);
+			});
+		}
 	});
 			
 }
 
-function getNextEventID (callback){
-	Event.find({},'url',{
-							skip:0,
-							limit:10,
-							sort:{
-									url: -1 //descending
-								}
-							}, 
-							function(err,latestEventUrls){
-								if (latestEventUrls.length == 0)
-									callback (-1);
-								else{
-									console.log ("latest eventurl:"+latestEventUrls[0].url);
-									callback (latestEventUrls[0].url);
-								}
-							});
+// hash the event, get money
+function getNewEventURL (event, callback){
+	bcrypt.hash(""+event.title+event.description+event.group, 8, function(err, hash) {
+				replaceUnsafe(hash, function (safeHash){
+					var shortHash = safeHash.substring (safeHash.length-11, safeHash.length-1);
+					callback (err, shortHash);
+				});
+			});
+}
+
+function replaceUnsafe (str, callback){
+	var removed = str.split("/").join("");
+	if (removed.length < 10){
+		removed = removed + "v11D9dD3r13T";
+	}
+	callback (removed);
 }
 
