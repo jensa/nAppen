@@ -16,6 +16,7 @@ app.get ('/logout', logout);
 app.get ('/createEvent', isLoggedIn, adminRole, eventsHandler.createEvent);
 app.get ('/fail', fail);
 app.get ('/DELETE', isLoggedIn, adminRole, deleteall);
+app.get ('/starttest', deleteall);
 app.get('/', function (req, res){ res.redirect('/login')});
 //404
 app.get('*', balls);
