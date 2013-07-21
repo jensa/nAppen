@@ -9,9 +9,8 @@
 			input(type="text", name="eventTitle")
 		div
 			label Eventets beskrivning
-			input(type="text", name="eventDescription")
+			textarea(name="eventDescription")
 		div
-			label submitevent
 			input(type="submit", name="eventSubmit", value="Skapa")
 		
 		
@@ -28,6 +27,24 @@
 			label Email
 			input(type="text", name="email")
 		div
+			label n0llegrupp
+			select(name="group")
+				option(value="A") A
+				option(value="B") B
+				option(value="C") C
+				option(value="D") D
+				option(value="E") E
+				option(value="F") F
+				option(value="G") G
+				option(value="H") H
+				option(value="I") I
+				option(value="J") J
+				option(value="K") K
+				option(value="L") L
+				option(value="M") M
+				option(value="ALL") Alla (admin)
+
+		div
 			label Admin?
 			select(name="admin")
 				option(value="true") Sant
@@ -39,5 +56,5 @@
 	form(id="deleteeverything", action="DELETE", method="get")
 		div
 			input(type="submit", name="deleteSubmit", value="TA BORT ALLT")
-			
+
 		

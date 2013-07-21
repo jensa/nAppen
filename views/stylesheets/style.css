@@ -24,9 +24,9 @@ textarea:focus, input:focus {
 
 label {
 	float: left;
-	text-align: center;
+	text-align: left;
 	margin-right: 15px;
-	width: 100px;
+	width: 250px;
 }
 
 input {
@@ -74,7 +74,9 @@ input {
 
 #eventblock
 {
-	border: 3px solid #C0FFEE
+	width: 244px;
+	margin-top: 3px;
+	border: 3px solid #F400A1;
 }
 
 #login_button{

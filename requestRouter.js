@@ -48,8 +48,9 @@ function isLoggedIn (req, res, next){
 
 function deleteall (req, res){
 	database.delAllRecords (null);
-	createUser ("jerre", "jerre", "jensarv@gmail.com", true, function(data){
-		helper.renderPage (req, res, 'login.jade', 	{
+	userHandler.createUser ("jerre", "jerre", "jensarv@gmail.com", 
+		"ALL", true, function(data){
+						helper.renderPage (req, res, 'login.jade', 	{
 								title:"Logga in", 
 								message:"Tog bort hela databasen. "+
 										"Återskapade adminkontot:" +
@@ -63,7 +64,8 @@ function deleteall (req, res){
 }
 
 function fail (req, res){
-	helper.renderPage (req, res, 'kefft.jade', {title:'Failed', message:'allt gick till helvete'});
+	helper.renderPage (req, res, 'kefft.jade', 
+		{title:'Failed', message:'allt gick till helvete'});
 }
 
 function news (req, res){
@@ -72,5 +74,6 @@ function news (req, res){
 
 function balls (req, res){
 	res.writeHeader (404, {"Content-type":"text/html"});
-	res.end ("<html><body bgcolor=#F400A1><h3><center>BORTA!<br><img src='https://sphotos-b.xx.fbcdn.net/hphotos-prn2/p480x480/969566_549584988426424_342740630_n.jpg'></center></h3></body></html>");
+	res.end ("<html><body bgcolor=#F400A1><h3><center>BORTA!<br>"+
+		"<img src='https://sphotos-b.xx.fbcdn.net/hphotos-prn2/p480x480/969566_549584988426424_342740630_n.jpg'></center></h3></body></html>");
 }

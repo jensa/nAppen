@@ -38,12 +38,12 @@ exports.handleCreateUserRequest = function (req, res){
 		else
 			helper.renderPage (req, res, 'adminview.jade', {
 											title: "Admin",
-											message:"Skapade Användare:<br>"+
-													"användarnamn: "+data.user+
-													"lösenord: "+data.password+
-													"email: "+data.email+
-													"grupp: "+data.group+
-													"admin: "+data.admin});
+											message:"Skapade Användare.\n"+
+													", användarnamn: "+data.user+
+													", lösenord: "+data.password+
+													", email: "+data.email+
+													", grupp: "+data.group+
+													", admin: "+data.admin});
 	});
 }
 
@@ -62,6 +62,8 @@ function createUser (user, pwd, email, grp, admin, callback){
 			callback ({error:"Gick inte att skapa användare"});
 	});
 }
+
+exports.createUser = createUser;
 
 exports.autoLogin = function (req, res){
 		if (req.cookies.username == undefined || req.cookies.password == undefined){
