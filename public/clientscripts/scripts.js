@@ -15,10 +15,21 @@ $(window).resize(function() {
 function resizeCss (){
 	var width = $(window).width();
 	var inputwidth = "100%";
-	if (width > 400)
+	var bodywidth = "90%";
+	var center = false;
+	if (width > 500){
 		inputwidth = "300px";
+		bodywidth = "300px";
+		center = true;
+	}
 	$("input").css ("width", inputwidth);
 	$("select").css ("width", inputwidth);
 	$("textarea").css ("width", inputwidth);
-
+	$("body").css ("width", bodywidth);
+	if (center)
+		$("body").css("margin", "0px auto");
+	else{
+		$("body").css("margin", "0px");
+		$("body").css("margin-left", "1em");
+	}
 }
