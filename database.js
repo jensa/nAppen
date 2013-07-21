@@ -21,7 +21,8 @@ var userSchema = new mongoose.Schema({
 		username : String,
 		password : String,
 		email : String,
-		admin : Boolean
+		admin : Boolean,
+		group : String
 });
 User = mongoose.model ('users', userSchema);
 
@@ -29,9 +30,18 @@ var eventSchema = new mongoose.Schema({
 	title : String,
 	description : String,
 	url : Number,
+	text : String,
+	group : String
+
 });
 Event = mongoose.model ('events', eventSchema);
 
+var imageSchema = new mongoose.Schema ({
+		url : String,
+		event : String,
+		group : String
+});
+Image = mongoose.model ('images', imageSchema);
 
 /* login validation methods */
 
@@ -218,11 +228,5 @@ function getNextEventID (callback){
 									callback (latestEventUrls[0].url);
 								}
 							});
-}
-
-function EventObj (title, desc, url){
-	this.title = title;
-	this.desc = desc;
-	this.url = url;
 }
 
