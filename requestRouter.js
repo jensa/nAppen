@@ -49,7 +49,7 @@ function isLoggedIn (req, res, next){
 
 function deleteall (req, res){
 	database.delAllRecords (null);
-	userHandler.createUser ("DKD", "DKD", "jensarv@gmail.com", 
+	userHandler.createUser ("dkd", "dkd", "jensarv@gmail.com", 
 		"ALL", true, function(data){
 						helper.renderPage (req, res, 'login.jade', 	{
 								title:"Logga in", 
