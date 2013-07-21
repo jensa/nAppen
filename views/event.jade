@@ -2,7 +2,7 @@ extends base
 block flow
 	#eventflow
 		each event in events
-			#eventblock
+			.eventblock
 				h2 #{event.title}
 				p #{event.description}
 				a(href='/event' + "?eventID=" + event.url)

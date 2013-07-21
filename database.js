@@ -185,11 +185,23 @@ var validatePassword = function(plainPass, hashedPass, callback)
 	bcrypt.compare(plainPass, hashedPass, callback);
 }
 
-exports.getEvents = function (callback){
-	Event.find ({}, function (e, o){
+exports.getEvents = function (usergroup, callback){
+	var group = {group:usergroup};
+	if (usergroup == "ALL")
+		group = {};
+	console.log ("group of calling user: " + group.group);
+	Event.find (group, function (e, o){
 		console.log ("objects found: "+o);
 		if (!e)
 			callback (o);
+	});
+}
+
+exports.getEvent = function (url, callback){
+	Event.findOne ({url:url}, function (e, o){
+		if (e)
+			callback (e);
+		callback (o);
 	});
 }
 
@@ -199,7 +211,9 @@ exports.addEvent = function (ev, callback){
 		var newEvent = new Event ({
 							title: ev.title,
 							description : ev.description,
-							url: nextID
+							url: nextID,
+							text: ev.text,
+							group: ev.group
 						});
 		newEvent.save (function (error, evenz){
 			if (!error)
