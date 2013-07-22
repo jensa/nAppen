@@ -18,10 +18,10 @@ body
 					if (adminrole)
 						td
 							a(href='/admin') Admin
-	block flow
 	block errormessage
-		#errormsg	
-			p #{message}
+		.errormsg	
+			p #{message}						
+	block flow
 block scripts
 	script(src="http://code.jquery.com/jquery-1.10.1.min.js")
 	script(src="http://code.jquery.com/jquery-migrate-1.2.1.min.js")

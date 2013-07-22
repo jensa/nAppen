@@ -191,7 +191,6 @@ exports.getEvents = function (usergroup, callback){
 		group = {};
 	console.log ("group of calling user: " + group.group);
 	Event.find (group, function (e, o){
-		console.log ("objects found: "+o);
 		if (!e)
 			callback (o);
 	});

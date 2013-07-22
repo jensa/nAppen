@@ -14,6 +14,7 @@ app.post ('/makeuser', isLoggedIn, adminRole, userHandler.handleCreateUserReques
 app.get ('/admin', isLoggedIn, adminRole, admin);
 app.get ('/logout', logout);
 app.get ('/createEvent', isLoggedIn, adminRole, eventsHandler.createEvent);
+app.post ('/uploadImage', eventsHandler.uploadImage);
 app.get ('/fail', fail);
 app.get ('/DELETE', isLoggedIn, adminRole, deleteall);
 app.get ('/starttest', deleteall);

@@ -50,6 +50,14 @@ exports.handleEventRequest = function (req, res){
 	}
 }
 
+exports.uploadImage = function (req, res){
+	var eventID = req.param('eventID');
+	var filename = req.param ('imageFile');
+	console.log ("image file: "+filename+", eventID: "+eventID);
+	// after uploading,
+	showEvent (req, res, eventID, "Laddade upp "+filename);
+}
+
 function listEvents (req, res, message){
 	var eventArray = new Array ();
 		database.getEvents (req.session.user.group, function (events){
@@ -66,17 +74,19 @@ function listEvents (req, res, message){
 		});
 }
 
-function showEvent (req, res, eventID){
+function showEvent (req, res, eventID, message){
 	var userGroup = req.session.user.group;
+	console.log ("get event: "+eventID);
 	database.getEvent (eventID, function (err, event){
 		if (err)
 			listEvents (req, res, err);
-		if (!event)
+		if (event == undefined)
 			listEvents (req, res, err);
 		if (event.group != userGroup)
 			listEvents (req, res, 'Du har inte access till det valda eventet');
 		//TODO här: adda ajax till singleEvent.jade som laddar bilderna.
 		//det kanske blir jättejobbigt, men vafan
+		event.message = message;
 		helper.renderPage (req, res, 'singleEvent.jade', event);
 	});
 }
