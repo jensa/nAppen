@@ -43,31 +43,33 @@ exports.setRoutes = function (app){
 	app.get('*', balls);
 }
 
+//Just render the goddamn admin page
 function admin(req, res){
 	helper.renderPage (req, res, 'adminview.jade', {title:'Admin'});
 }
 
+//destroy cookies, redirect to root
 function logout (req, res){
 		res.clearCookie('username');
 		res.clearCookie('password');
 		req.session.destroy(function(e){ res.redirect('/');		});
 }
 
+//  check this sessions user for the admin attribute and call next if true, else redirect to root
 function adminRole (req, res, next){
-	console.log ("processing adminrole: "+req.session.user.admin);
 	if (req.session.user.admin)
 		next ();
 	else
 		res.redirect('/');
 }
-
+// Check if this session has a user attached to it
 function isLoggedIn (req, res, next){
 	if (req.session.user != null)
 		next ();
 	else
 		res.redirect ('/login');
 }
-
+// Delete fucking everything, remake admin account
 function deleteall (req, res){
 	database.delAllRecords (null);
 	userHandler.createUser ("dkd", "dkd", "jensarv@gmail.com", 
@@ -84,16 +86,17 @@ function deleteall (req, res){
 	});
 	
 }
-
+// WHY
 function fail (req, res){
 	helper.renderPage (req, res, 'kefft.jade', 
 		{title:'Failed', message:'allt gick till helvete'});
 }
-
+//Render the news page
 function news (req, res){
 	helper.renderPage (req, res, 'news.jade', {title:'News'})
 }
 
+// write out a raw 404 page with yolo swaggins. Maybe we should make something nice here
 function balls (req, res){
 	res.writeHeader (404, {"Content-type":"text/html"});
 	res.end ("<html><body bgcolor=#F400A1><h3><center>BORTA!<br>"+
