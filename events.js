@@ -1,4 +1,5 @@
 ﻿var helper = require ('./mods/helper');
+var fs = require('fs');
 var database;
 
 nollegroups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"];
@@ -35,9 +36,16 @@ exports.handleEventRequest = function (req, res){
 
 exports.uploadImage = function (req, res){
 	var eventID = req.param('eventID');
-	var filename = req.param ('imageFile');
+	var filename = req.files.imageFile.name;
 	console.log ("image file: "+filename+", eventID: "+eventID);
 	// after uploading,
+
+	fs.readFile(req.files.imageFile.path, function (err, data) {
+		var newPath = __dirname + "/images/" + filename;
+		fs.writeFile(newPath, data, function (err) {
+			// lolwut
+		});
+	});
 	showEvent (req, res, eventID, "Laddade upp "+filename);
 }
 
@@ -57,7 +65,8 @@ function listEvents (req, res, message){
 	});
 }
 
-function showEvent (req, res, eventID, message){
+function showEvent (req, res, eventID, message) {
+	// TODO app fucking crashes here :( req.session.user == undefined D: but how?
 	var userGroup = req.session.user.group;
 	console.log ("get event: "+eventID);
 	database.getEvent (eventID, function (err, event){
