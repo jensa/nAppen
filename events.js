@@ -11,12 +11,9 @@ exports.init = function (db){
 exports.createEvent = function (req, res){
 	var desc = req.param('eventDescription');
 	var title = req.param ('eventTitle');
-	var text = req.param ('eventText');
-
 	var eventc = {
 					description : desc,
 					title: title,
-					text: text
 				};
 	database.addEvent (eventc, function (outcome) {
 		console.log (outcome);
@@ -51,11 +48,11 @@ exports.uploadImage = function (req, res){
 
 function listEvents (req, res, message){
 	var eventArray = new Array ();
-	database.getEvents (req.session.user.group, function (events){
+	database.getEvents (function (events){
 		for (es in events){
 			var e = events[es];
 			var anEvent = 	{
-				title: e.title, 
+				title: e.title,
 				description : e.description, 
 				url : e.url
 			};
@@ -65,20 +62,49 @@ function listEvents (req, res, message){
 	});
 }
 
+exports.eventTitles = function (callback){
+	var eventArray = new Array ();
+	database.getEvents (function (events){
+		for (es in events){
+			var e = events[es];
+			var anEvent = 	{
+				title: e.title, 
+				url : e.url
+			};
+			eventArray.push (anEvent);
+		}
+		callback (eventArray);
+	});
+}
+
 function showEvent (req, res, eventID, message) {
-	// TODO app fucking crashes here :( req.session.user == undefined D: but how?
 	var userGroup = req.session.user.group;
-	console.log ("get event: "+eventID);
 	database.getEvent (eventID, function (err, event){
 		if (err)
 			listEvents (req, res, err);
 		if (event == undefined)
 			listEvents (req, res, err);
-		if (event.group != userGroup)
-			listEvents (req, res, 'Du har inte access till det valda eventet');
 		//TODO här: adda ajax till singleEvent.jade som laddar bilderna.
 		//det kanske blir jättejobbigt, men vafan
 		event.message = message;
-		helper.renderPage (req, res, 'singleEvent.jade', event);
+		database.getObjectives (userGroup, eventID, function (e,o){
+			event.objectives = o;
+			helper.renderPage (req, res, 'singleEvent.jade', event);
+		});
 	});
+}
+
+exports.createObjectives = function (req, res){
+	var group = req.param('group');
+	var title = req.param('objectiveTitle');
+	var description = req.param ('objectiveDescription');
+	var eventID = req.param ('eventID');
+
+	database.addObjective(title, description, group, eventID, function (e, o){
+		var message = "Uppdrag tillagt";
+		if (e)
+			message = e;
+		helper.renderPage (req, res, 'adminview.jade', {message:message});
+	});
+
 }

@@ -2,7 +2,10 @@ extends base
 block flow
 
 	h2 Aktuellt uppdrag
-	p #{text}
+	if (objectives)
+		for obj in objectives
+			h2 #{obj.title}
+			p #{obj.description}
 	#imageUploadForm
 		form(id="imageUpload", action="uploadImage", method="post", enctype="multipart/form-data")
 			label Ladda upp bild

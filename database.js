@@ -30,13 +30,12 @@ var eventSchema = new mongoose.Schema({
 	title : String,
 	description : String,
 	url : String,
-	text : String
 });
 Event = mongoose.model ('events', eventSchema);
 
 var imageSchema = new mongoose.Schema ({
 	url : String,
-	event : String,
+	eventID : String,
 	group : String
 });
 
@@ -44,7 +43,9 @@ Image = mongoose.model ('images', imageSchema);
 
 var objectiveSchema = new mongoose.Schema({
 	title : String,
-	description : String
+	description : String,
+	group : String,
+	eventID : String
 });
 
 Objective = mongoose.model ('objectives', objectiveSchema);
@@ -113,7 +114,6 @@ function addNewAccount(newData, callback) {
 exports.addNewAccount = addNewAccount;
 
 exports.createOrUpdate = function createOrUpdate (data, callback){
-	console.log ("updating with admin="+data.admin);
 	User.findOne ({username:data.username}, function (e, o){
 		if (o)
 			updateAccount (data, callback);
@@ -181,8 +181,9 @@ exports.validateResetLink = function(email, passHash, callback){
 
 exports.delAllRecords = function(callback)
 {
-	User.remove({}, callback); // reset User collection for testing //
+	Objective.remove({}, callback);
 	Event.remove({}, callback);
+	User.remove({}, callback); // reset User collection for testing //
 }
 
 var validatePassword = function(plainPass, hashedPass, callback)
@@ -190,12 +191,25 @@ var validatePassword = function(plainPass, hashedPass, callback)
 	bcrypt.compare(plainPass, hashedPass, callback);
 }
 
-exports.getEvents = function (usergroup, callback){
-	var group = {group:usergroup};
-	if (usergroup == "ALL")
-		group = {};
-	console.log ("group of calling user: " + group.group);
-	Event.find (group, function (e, o){
+exports.getObjectives = function (usergroup, eventID, callback){
+	var filter = {eventID:eventID};
+	if (usergroup != "ALL")
+		filter.group = usergroup;
+	Objective.find(filter).exec (callback);
+}
+
+exports.addObjective = function (title, description, group, eventID, callback){
+	var obj = new Objective ({
+		title:title,
+		description:description,
+		group:group,
+		eventID:eventID
+	});
+	obj.save (callback);
+}
+
+exports.getEvents = function (callback){
+	Event.find ({}, function (e, o){
 		if (!e)
 			callback (o);
 	});
@@ -214,7 +228,6 @@ exports.addEvent = function (ev, callback){
 				title: ev.title,
 				description : ev.description,
 				url: url,
-				text: ev.text
 			});
 			newEvent.save (function (error, evenz) {
 				if (!error)

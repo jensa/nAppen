@@ -32,6 +32,7 @@ exports.setRoutes = function (app){
 	app.post ('/createEvent', isLoggedIn, adminRole, eventsHandler.createEvent);
 	// Deals with image upload requests (n0llan tries to upload images of momsen)
 	app.post ('/uploadImage', eventsHandler.uploadImage);
+	app.post ('/createObjectives', eventsHandler.createObjectives);
 	// I don't know why the fuck I made this. This is retarded
 	app.get ('/fail', fail);
 	// DELETE FUCKING EVERYTHING FROM THE DB. also, recreate admin account
@@ -45,7 +46,10 @@ exports.setRoutes = function (app){
 
 //Just render the goddamn admin page
 function admin(req, res){
-	helper.renderPage (req, res, 'adminview.jade', {title:'Admin'});
+	eventsHandler.eventTitles (function (eventTitles){
+		console.log ("EVENTS FOUND_"+JSON.stringify(eventTitles));
+		helper.renderPage (req, res, 'adminview.jade', {title:'Admin', events:eventTitles});
+	});
 }
 
 //destroy cookies, redirect to root
