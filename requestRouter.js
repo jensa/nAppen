@@ -1,26 +1,46 @@
-﻿var database = require('./database');
+//We need a lot of stuff in this file
+var database = require('./database');
 var eventsHandler = require('./events');
 var helper = require ('./mods/helper')
 var userHandler = require('./userHandler');
+//we don't want to initialize the db twice, so send the database variable to all handlers
 userHandler.init (database);
 eventsHandler.init (database);
 
+//Here we define all the paths for the app
+// The path structure works like this:
+// app.{METHOD}. ({PATH}, requesthandlers...)
+// Example: app.post ('/fuck', isLoggedIn, balls) makes a POST request to /fuck go to the function isLoggedIn,
+// which checks if the user is logged in and calls the function balls, which (hopefully) renders a page
+// You can define as many request handlers as you wish
 exports.setRoutes = function (app){
-app.get ('/event', isLoggedIn, eventsHandler.handleEventRequest);
-app.get ('/login', userHandler.autoLogin);
-app.post ('/login', userHandler.auth);
-app.get ('/news', isLoggedIn, news);
-app.post ('/makeuser', isLoggedIn, adminRole, userHandler.handleCreateUserRequest);
-app.get ('/admin', isLoggedIn, adminRole, admin);
-app.get ('/logout', logout);
-app.get ('/createEvent', isLoggedIn, adminRole, eventsHandler.createEvent);
-app.post ('/uploadImage', eventsHandler.uploadImage);
-app.get ('/fail', fail);
-app.get ('/DELETE', isLoggedIn, adminRole, deleteall);
-app.get ('/starttest', deleteall);
-app.get('/', function (req, res){ res.redirect('/login')});
-//404
-app.get('*', balls);
+	// Event view, likely reached from link bar
+	app.get ('/event', isLoggedIn, eventsHandler.handleEventRequest);
+	//Login view, Tries to log in using cookie, renders login form if none exists
+	app.get ('/login', userHandler.autoLogin);
+	// Authenticates a login request
+	app.post ('/login', userHandler.auth);
+	//Just renders the news view
+	app.get ('/news', isLoggedIn, news);
+	//Creates a user using the parameters of the POST request made
+	app.post ('/makeuser', isLoggedIn, adminRole, userHandler.handleCreateUserRequest);
+	// renders admin view
+	app.get ('/admin', isLoggedIn, adminRole, admin);
+	// destroys session cookie and renders login form
+	app.get ('/logout', logout);
+	// Creates a new event using the parameters of the request
+	app.get ('/createEvent', isLoggedIn, adminRole, eventsHandler.createEvent);
+	// Deals with image upload requests (n0llan tries to upload images of momsen)
+	app.post ('/uploadImage', eventsHandler.uploadImage);
+	// I don't know why the fuck I made this. This is retarded
+	app.get ('/fail', fail);
+	// DELETE FUCKING EVERYTHING FROM THE DB. also, recreate admin account
+	app.get ('/DELETE', isLoggedIn, adminRole, deleteall);
+	// create admin account, used for first timers. 
+	app.get ('/starttest', deleteall);
+	app.get('/', function (req, res){ res.redirect('/login')});
+	//404
+	app.get('*', balls);
 }
 
 function admin(req, res){
