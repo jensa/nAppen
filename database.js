@@ -18,11 +18,11 @@ db.once('open', function () {
 
 /* Schema definitions */
 var userSchema = new mongoose.Schema({
-		username : String,
-		password : String,
-		email : String,
-		admin : Boolean,
-		group : String
+	username : String,
+	password : String,
+	email : String,
+	admin : Boolean,
+	group : String
 });
 User = mongoose.model ('users', userSchema);
 
@@ -30,43 +30,49 @@ var eventSchema = new mongoose.Schema({
 	title : String,
 	description : String,
 	url : String,
-	text : String,
-	group : String
-
+	text : String
 });
 Event = mongoose.model ('events', eventSchema);
 
 var imageSchema = new mongoose.Schema ({
-		url : String,
-		event : String,
-		group : String
+	url : String,
+	event : String,
+	group : String
 });
+
 Image = mongoose.model ('images', imageSchema);
+
+var objectiveSchema = new mongoose.Schema({
+	title : String,
+	description : String
+});
+
+Objective = mongoose.model ('objectives', objectiveSchema);
 
 /* login validation methods */
 
 exports.autoLogin = function(user, pass, callback){
 	User.findOne({username:user}, function(e, o) {
-	if (o){
+	if (o) {
 		o.password == pass ? callback(o) : callback(null);
-	}else{
+	} else {
 		callback(null);
 	}
 	});
 }
 
-exports.manualLogin = function(user, pass, callback){
+exports.manualLogin = function(user, pass, callback) {
 	User.findOne({username:user}, function(e, o) {
-	if (o == null){
-		callback('user-not-found');
-	}else{
-		validatePassword(pass, o.password, function(err, res) {
-			if (res){
-				callback(null, o);
-			}	else{
-				callback('invalid-password');
-			}
-		});
+		if (o == null) {
+			callback('user-not-found');
+		} else {
+			validatePassword(pass, o.password, function(err, res) {
+				if (res) {
+					callback(null, o);
+				} else {
+					callback('invalid-password');
+				}
+			});
 		}
 	});
 }
@@ -74,15 +80,15 @@ exports.manualLogin = function(user, pass, callback){
 /* record insertion, update & deletion methods */
 
 /** callback returns 'success' on success */
-function addNewAccount(newData, callback){
+function addNewAccount(newData, callback) {
 	User.findOne({username:newData.username}, function(e, o) {
-		if (o){
+		if (o) {
 			callback('username-taken');
-		}else{
+		} else {
 			User.findOne({email:newData.email}, function(e, o) {
-				if (o){
+				if (o) {
 					callback('email-taken');
-				}else{
+				} else {
 					bcrypt.hash(newData.password, 8, function(err, hash) {
 						var newUser = new User ({	
 													username : newData.username, 
@@ -116,20 +122,19 @@ exports.createOrUpdate = function createOrUpdate (data, callback){
 	});
 }
 
-function updateAccount(newData, callback)
-{
+function updateAccount(newData, callback) {
 	User.findOne({username:newData.username}, function(e, o){
 		o.username = newData.username;
 		o.email = newData.email;
 		o.admin = newData.admin;
-		if (newData.password == ''){
+		if (newData.password == '') {
 			o.save(function(err) {
 				if (err) 
 					callback(err);
 				else 
 					callback('success');
 			});
-		}else{
+		} else {
 			bcrypt.hash(newData.password, 8, function(err, hash) {
 				o.password = hash;
 				o.save(function(err) {
@@ -147,9 +152,9 @@ exports.updateAccount = updateAccount;
 
 exports.updatePassword = function(email, newPass, callback){
 	User.findOne({email:email}, function(e, o){
-		if (e){
+		if (e) {
 			callback(e, null);
-		}else{
+		} else {
 			bcrypt.hash(newPass, 8, function(err, hash) {
 				o.password = hash;
 				User.save(o, {safe: true}, callback);
@@ -202,17 +207,16 @@ exports.getEvent = function (url, callback){
 
 exports.addEvent = function (ev, callback){
 	getNewEventURL (ev, function (err, url){
-		if (err){
+		if (err) {
 			callback ("couldnt create hash");
 		} else {
 			var newEvent = new Event ({
 				title: ev.title,
 				description : ev.description,
 				url: url,
-				text: ev.text,
-				group: ev.group
+				text: ev.text
 			});
-			newEvent.save (function (error, evenz){
+			newEvent.save (function (error, evenz) {
 				if (!error)
 					callback ("success");
 				else if (!evenz)
@@ -228,11 +232,11 @@ exports.addEvent = function (ev, callback){
 // hash the event, get money
 function getNewEventURL (event, callback){
 	bcrypt.hash(""+event.title+event.description+event.group, 8, function(err, hash) {
-				replaceUnsafe(hash, function (safeHash){
-					var shortHash = safeHash.substring (safeHash.length-11, safeHash.length-1);
-					callback (err, shortHash);
-				});
-			});
+		replaceUnsafe(hash, function (safeHash){
+			var shortHash = safeHash.substring (safeHash.length-11, safeHash.length-1);
+			callback (err, shortHash);
+		});
+	});
 }
 
 function replaceUnsafe (str, callback){

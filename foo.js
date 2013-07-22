@@ -24,8 +24,8 @@ app.configure(function(){
 });
 
 //This is supposed to do something but I think its safe to remove it
-app.configure('development', function(){
-app.use(express.errorHandler());
+app.configure('development', function() {
+	app.use(express.errorHandler());
 });
 
 // This is where everything important happens

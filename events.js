@@ -11,33 +11,16 @@ exports.createEvent = function (req, res){
 	var desc = req.param('eventDescription');
 	var title = req.param ('eventTitle');
 	var text = req.param ('eventText');
-	var group = req.param ('group');
-	if (group == "ALL"){
-		for (grp in nollegroups){
-			var eventc = {
-							description : desc,
-							title: title,
-							text: text,
-							group: grp
-							};
-			database.addEvent (eventc, function (outcome){
-				console.log (outcome);
-			});
-		}
-		helper.renderPage (req, res, 'adminview.jade', {title: 'Admin', 
-														message: "Skapade event för alla n0llegrupper"});
-	} else{
-		var eventc = {
-						description : desc,
-						title: title,
-						text: text,
-						group: group
-					};
-		database.addEvent (eventc, function (outcome){
-			console.log (outcome);
-			helper.renderPage (req, res, 'adminview.jade', {title: 'Admin', message: outcome});
-		});
-	}
+
+	var eventc = {
+					description : desc,
+					title: title,
+					text: text
+				};
+	database.addEvent (eventc, function (outcome) {
+		console.log (outcome);
+		helper.renderPage (req, res, 'adminview.jade', {title: 'Admin', message: outcome});
+	});
 }
 
 // Called from GET /event
@@ -45,7 +28,7 @@ exports.handleEventRequest = function (req, res){
 	var eventID = req.query.eventID
 	if (eventID){
 		showEvent (req, res, eventID);
-	} else{
+	} else {
 		listEvents (req, res);
 	}
 }
@@ -60,18 +43,18 @@ exports.uploadImage = function (req, res){
 
 function listEvents (req, res, message){
 	var eventArray = new Array ();
-		database.getEvents (req.session.user.group, function (events){
-			for (es in events){
-				var e = events[es];
-				var anEvent = 	{
-					title: e.title, 
-					description : e.description, 
-					url : e.url
-				};
-				eventArray.push (anEvent);
-			}
-			helper.renderPage (req, res, 'event.jade', {title:'Events', events:eventArray, message:message});
-		});
+	database.getEvents (req.session.user.group, function (events){
+		for (es in events){
+			var e = events[es];
+			var anEvent = 	{
+				title: e.title, 
+				description : e.description, 
+				url : e.url
+			};
+			eventArray.push (anEvent);
+		}
+		helper.renderPage (req, res, 'event.jade', {title:'Events', events:eventArray, message:message});
+	});
 }
 
 function showEvent (req, res, eventID, message){

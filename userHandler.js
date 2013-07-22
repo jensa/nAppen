@@ -6,18 +6,18 @@ exports.init = function (db){
 }
 
 exports.auth = function (req, res){
-		database.manualLogin(req.param('username'), req.param('password'), 
-		function(e, o){
-			if (!o){
-				helper.renderPage (req, res, 'login.jade',  
-							{title: 'Login',message: 'Fel användarnamn eller lösenord'});
-			}else{
-				req.session.user = o;
-				res.cookie('username', o.username, { maxAge: 900000 });
-				res.cookie('password', o.password, { maxAge: 900000 });
-				res.redirect ('/news');
-			}
-		});
+	database.manualLogin(req.param('username'), req.param('password'), 
+	function(e, o) {
+		if (!o) {
+			helper.renderPage (req, res, 'login.jade',  
+						{title: 'Login',message: 'Fel användarnamn eller lösenord'});
+		} else {
+			req.session.user = o;
+			res.cookie('username', o.username, { maxAge: 900000 });
+			res.cookie('password', o.password, { maxAge: 900000 });
+			res.redirect ('/news');
+		}
+	});
 }
 
 exports.handleCreateUserRequest = function (req, res){
@@ -58,24 +58,25 @@ function createUser (user, pwd, email, grp, admin, callback){
 											group: grp,
 											admin:admin
 										});
-		}else
+		} else {
 			callback ({error:"Gick inte att skapa användare"});
+		}
 	});
 }
 
 exports.createUser = createUser;
 
-exports.autoLogin = function (req, res){
-		if (req.cookies.username == undefined || req.cookies.password == undefined){
-			helper.renderPage(req, res, 'login.jade', { title: 'Logga in' });
-		} else{
-			database.autoLogin(req.cookies.username, req.cookies.password, function(o){
-				if (o != null){
-					req.session.user = o;
-					res.redirect('/news');
-				}	else{
-					helper.renderPage (req, res, 'login.jade', {title: 'Logga in'});
-				}
-			});
-		}
+exports.autoLogin = function (req, res) {
+	if (req.cookies.username == undefined || req.cookies.password == undefined){
+		helper.renderPage(req, res, 'login.jade', { title: 'Logga in' });
+	} else {
+		database.autoLogin(req.cookies.username, req.cookies.password, function(o){
+			if (o != null) {
+				req.session.user = o;
+				res.redirect('/news');
+			} else {
+				helper.renderPage (req, res, 'login.jade', {title: 'Logga in'});
+			}
+		});
+	}
 }
