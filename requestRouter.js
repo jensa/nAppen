@@ -29,7 +29,7 @@ exports.setRoutes = function (app){
 	// destroys session cookie and renders login form
 	app.get ('/logout', logout);
 	// Creates a new event using the parameters of the request
-	app.get ('/createEvent', isLoggedIn, adminRole, eventsHandler.createEvent);
+	app.post ('/createEvent', isLoggedIn, adminRole, eventsHandler.createEvent);
 	// Deals with image upload requests (n0llan tries to upload images of momsen)
 	app.post ('/uploadImage', eventsHandler.uploadImage);
 	// I don't know why the fuck I made this. This is retarded
