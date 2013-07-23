@@ -88,7 +88,7 @@ function showEvent (req, res, eventID, message) {
 		//det kanske blir jättejobbigt, men vafan
 		event.message = message;
 		database.getObjectives (userGroup, eventID, function (e,o){
-			console.log (JSON.stringify (o));
+			//console.log (JSON.stringify (o));
 			event.objectives = o;
 			helper.renderPage (req, res, 'singleEvent.jade', event);
 		});
@@ -121,6 +121,7 @@ exports.getAllObjectives = function (callback){
 			callback (o);
 	});
 }
+
 var assignmentsPerRequest = 10;
 exports.assignObjectives =function (req, res){
 	var objectives = new Array ();

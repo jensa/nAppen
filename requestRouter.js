@@ -78,9 +78,11 @@ function isLoggedIn (req, res, next){
 }
 // Delete fucking everything, remake admin account
 function deleteall (req, res){
-	database.delAllRecords (null);
-	userHandler.createUser ("dkd", "dkd", "jensarv@gmail.com" , 
+	database.delAllRecords (function (e,o){
+		console.log ("deleted everything");
+		userHandler.createUser ("dkd", "dkd", "jensarv@gmail.com" , 
 		"ALL", true, function(data){
+						console.log ("got user data");
 						helper.renderPage (req, res, 'login.jade', 	{
 								title:"Logga in", 
 								message:"Tog bort hela databasen. "+
@@ -90,6 +92,7 @@ function deleteall (req, res){
 										"Email: "+data.email +
 										"Admin: "+data.admin
 								});
+					});
 	});
 	
 }

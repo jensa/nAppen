@@ -1,4 +1,4 @@
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcrypt-nodejs');
 
 // I think we can remove these
 var MongoDB = require('mongodb').Db;
@@ -88,11 +88,13 @@ exports.manualLogin = function(user, pass, callback) {
 
 /** callback returns 'success' on success */
 function addNewAccount(newData, callback) {
+	console.log ("finding account");
 	User.findOne({username:newData.username}, function(e, o) {
+		console.log ("found: "+ JSON.stringify (o));
 		if (o) {
 			callback('username-taken');
 		} else {
-			bcrypt.hash(newData.password, 8, function(err, hash) {
+			bcrypt.hash(newData.password, null, null, function(err, hash) {
 				var newUser = new User ({	
 					username : newData.username, 
 					password : hash, 
@@ -100,6 +102,7 @@ function addNewAccount(newData, callback) {
 					admin : newData.admin,
 					group : newData.group
 				});
+				console.log ("saving user");
 				newUser.save (function(error, user){
 					if (!error)
 						callback ("success");
@@ -182,9 +185,16 @@ exports.validateResetLink = function(email, passHash, callback){
 
 exports.delAllRecords = function(callback)
 {
-	Objective.remove({}, callback);
-	Event.remove({}, callback);
-	User.remove({}, callback); // reset User collection for testing //
+	console.log ("deleting records...");
+	Objective.remove({}, function (e, o){
+		console.log ("deleted objectives");
+		Event.remove({}, function(e,o){
+			console.log ("deleted events");
+			User.remove({}, callback);
+		});
+	});
+	
+	
 }
 
 var validatePassword = function(plainPass, hashedPass, callback)
@@ -198,7 +208,25 @@ exports.getObjectives = function (usergroup, eventID, callback){
 		filter.eventID=eventID;
 	if (usergroup != "ALL" && usergroup != null)
 		filter.groups = {$elemMatch: {group:usergroup}}; // filter on group, use $elemMatch to filter on array elements
-	Objective.find(filter).exec (callback);
+	Objective.find(filter).exec (function (e, o){
+		if (e)
+			callback (e, o);
+		else{
+			//sort placement->ascending
+
+			o.sort(function(a,b) {
+				if (a.groups[0]){
+					if (b.groups[0])
+						return a.groups[0].placement - b.groups[0].placement
+					else
+						return 1;
+				} else{
+					return -1;
+				}
+			});
+			callback (e, o);
+		}
+	});
 }
 
 exports.addObjective = function (o, callback){
