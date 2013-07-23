@@ -32,7 +32,10 @@ exports.setRoutes = function (app){
 	app.post ('/createEvent', isLoggedIn, adminRole, eventsHandler.createEvent);
 	// Deals with image upload requests (n0llan tries to upload images of momsen)
 	app.post ('/uploadImage', eventsHandler.uploadImage);
-	app.post ('/createObjectives', eventsHandler.createObjectives);
+
+	app.post ('/createObjectives', isLoggedIn, adminRole, eventsHandler.createObjectives);
+
+	app.post ('/uploadObjectiveFile', isLoggedIn, adminRole, eventsHandler.parseObjectiveFile);
 	// I don't know why the fuck I made this. This is retarded
 	app.get ('/fail', fail);
 	// DELETE FUCKING EVERYTHING FROM THE DB. also, recreate admin account

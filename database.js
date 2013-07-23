@@ -198,13 +198,8 @@ exports.getObjectives = function (usergroup, eventID, callback){
 	Objective.find(filter).exec (callback);
 }
 
-exports.addObjective = function (title, description, group, eventID, callback){
-	var obj = new Objective ({
-		title:title,
-		description:description,
-		group:group,
-		eventID:eventID
-	});
+exports.addObjective = function (o, callback){
+	var obj = new Objective (o);
 	obj.save (callback);
 }
 
@@ -212,6 +207,15 @@ exports.getEvents = function (callback){
 	Event.find ({}, function (e, o){
 		if (!e)
 			callback (o);
+	});
+}
+
+exports.getEventURLByTitle = function (title, callback){
+	Event.findOne({title:title}, function (e, o){
+		if (e)
+			callback (e, o);
+		else
+			callback (e, o.url);
 	});
 }
 

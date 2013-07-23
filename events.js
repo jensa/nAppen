@@ -100,11 +100,37 @@ exports.createObjectives = function (req, res){
 	var description = req.param ('objectiveDescription');
 	var eventID = req.param ('eventID');
 
-	database.addObjective(title, description, group, eventID, function (e, o){
+	var obj = {
+		title:title,
+		description:description,
+		group:group,
+		eventID:eventID
+		};
+	database.addObjective(obj, function (e, o){
 		var message = "Uppdrag tillagt";
 		if (e)
 			message = e;
 		helper.renderPage (req, res, 'adminview.jade', {message:message});
 	});
+}
 
+exports.parseObjectiveFile = function (req, res){
+	var filename = req.files.objectiveFile.name;
+	// after uploading,
+
+	fs.readFile(req.files.objectiveFile.path, function (err, data) {
+		if (err)
+			helper.renderPage (req, res, 'adminview.jade', {message:err});
+		var newObjectives = JSON.parse (data);
+		newObjectives.objectives.forEach (function (objective){
+			database.getEventURLByTitle (objective.event, function (e, o){
+				if (!e){
+					objective.eventID = o;
+					database.addObjective(objective);
+				}
+			});
+			
+		});
+		helper.renderPage (req, res, 'adminview.jade', {message:"Läste in filen"});
+	});
 }

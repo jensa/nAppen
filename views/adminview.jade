@@ -44,6 +44,11 @@ block flow
 					option(value="M") M
 			div
 				input(type="submit", name="objectiveSubmit", value="Skapa")
+		h2 Ladda upp uppdragsfil
+		form(id="uploadObjectiveJSON", action="uploadObjectiveFile", method="post", enctype="multipart/form-data")
+			div
+				input(type="file", name="objectiveFile")
+				input(type="submit", name="objectiveFileSubmit", value="Ladda upp")
 
 			
 	#createUser
