@@ -27,6 +27,20 @@ block flow
 			div
 				label Uppdragets beskrivning
 				textarea(name="objectiveDescription")
+			block skapaButton
+		h2 Ladda upp uppdragsfil
+		form(id="uploadObjectiveJSON", action="uploadObjectiveFile", method="post", enctype="multipart/form-data")
+			div
+				input(type="file", name="objectiveFile")
+				input(type="submit", name="objectiveFileSubmit", value="Ladda upp")
+	#assignObjectives
+		h2 Tilldela uppdrag
+		form(id="createObjectivesForm", action="assignObjectives", method="post")
+			div
+				select(name="objectives", multiple="multiple")
+					if objectives
+						for objective in objectives
+							option(value=objective._id) #{objective.title}
 			block n0llegroups
 				div
 					label n0llegrupp
@@ -44,21 +58,6 @@ block flow
 						option(value="K") K
 						option(value="L") L
 						option(value="M") M
-			block skapaButton
-		h2 Ladda upp uppdragsfil
-		form(id="uploadObjectiveJSON", action="uploadObjectiveFile", method="post", enctype="multipart/form-data")
-			div
-				input(type="file", name="objectiveFile")
-				input(type="submit", name="objectiveFileSubmit", value="Ladda upp")
-	#assignObjectives
-		h2 Tilldela uppdrag
-		form(id="createObjectivesForm", action="assignObjectives", method="post")
-			div
-				select(name="objectives", multiple="multiple")
-					if objectives
-						for objective in objectives
-							option(value=objective._id) #{objective.title}
-			block n0llegroups
 			div
 				input(type="submit", name="assignObjectiveSubmit", value="Tilldela")
 
