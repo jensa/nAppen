@@ -32,11 +32,12 @@ exports.setRoutes = function (app){
 	app.post ('/createEvent', isLoggedIn, adminRole, eventsHandler.createEvent);
 	// Deals with image upload requests (n0llan tries to upload images of momsen)
 	app.post ('/uploadImage', eventsHandler.uploadImage);
-
+	// Creates a new objective with the parameters of the request
 	app.post ('/createObjectives', isLoggedIn, adminRole, eventsHandler.createObjectives);
-
+	// Deals with saving uploaded JSON files as objectives
 	app.post ('/uploadObjectiveFile', isLoggedIn, adminRole, eventsHandler.parseObjectiveFile);
-
+	// TODO redesign objectives to not be bound to a specific group
+	// assigns the objectives in the request to the group specified in the request
 	app.post ('/assignObjectives', isLoggedIn, adminRole, eventsHandler.assignObjectives);
 	// I don't know why the fuck I made this. This is retarded
 	app.get ('/fail', fail);
