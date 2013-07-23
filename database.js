@@ -88,9 +88,7 @@ exports.manualLogin = function(user, pass, callback) {
 
 /** callback returns 'success' on success */
 function addNewAccount(newData, callback) {
-	console.log ("finding account");
 	User.findOne({username:newData.username}, function(e, o) {
-		console.log ("found: "+ JSON.stringify (o));
 		if (o) {
 			callback('username-taken');
 		} else {
@@ -102,7 +100,6 @@ function addNewAccount(newData, callback) {
 					admin : newData.admin,
 					group : newData.group
 				});
-				console.log ("saving user");
 				newUser.save (function(error, user){
 					if (!error)
 						callback ("success");
@@ -185,11 +182,8 @@ exports.validateResetLink = function(email, passHash, callback){
 
 exports.delAllRecords = function(callback)
 {
-	console.log ("deleting records...");
 	Objective.remove({}, function (e, o){
-		console.log ("deleted objectives");
 		Event.remove({}, function(e,o){
-			console.log ("deleted events");
 			User.remove({}, callback);
 		});
 	});
@@ -290,9 +284,17 @@ exports.addEvent = function (ev, callback){
 			
 }
 
+exports.saveImage = function (img, callback){
+	var image = new Image (img);
+	image.save (function (e, o){
+		if (e)
+			console.log ("Error while saving image: " + e);
+	});
+}
+
 // hash the event, get money
 function getNewEventURL (event, callback){
-	bcrypt.hash(""+event.title+event.description+event.group, 8, function(err, hash) {
+	bcrypt.hash(""+event.title+event.description+event.group, null, null, function(err, hash) {
 		replaceUnsafe(hash, function (safeHash){
 			var shortHash = safeHash.substring (safeHash.length-11, safeHash.length-1);
 			callback (err, shortHash);

@@ -33,16 +33,24 @@ exports.handleEventRequest = function (req, res){
 
 exports.uploadImage = function (req, res){
 	var eventID = req.param('eventID');
+	var eventTitle = req.param('eventTitle');
 	var filename = req.files.imageFile.name;
 	console.log ("image file: "+filename+", eventID: "+eventID);
-	// after uploading,
 
+	var newPath = __dirname + "/public/images/" + eventTitle+ "/" +filename;
 	fs.readFile(req.files.imageFile.path, function (err, data) {
-		var newPath = __dirname + "/images/" + filename;
 		fs.writeFile(newPath, data, function (err) {
-			// lolwut
+			
 		});
+		
 	});
+	database.saveImage ({	url : newPath,
+							eventID : eventID,
+							objective: String, // optional! I have no idea what I'm doing.
+							group : String
+						}, function (e, o){
+
+						});
 	showEvent (req, res, eventID, "Laddade upp "+filename);
 }
 
@@ -88,7 +96,6 @@ function showEvent (req, res, eventID, message) {
 		//det kanske blir jättejobbigt, men vafan
 		event.message = message;
 		database.getObjectives (userGroup, eventID, function (e,o){
-			//console.log (JSON.stringify (o));
 			event.objectives = o;
 			helper.renderPage (req, res, 'singleEvent.jade', event);
 		});
@@ -132,14 +139,12 @@ exports.assignObjectives =function (req, res){
 		if (objectiveID && placement)
 			objectives.push ({id:objectiveID, placement:placement});
 	};
-	console.log ("objectives to assign: "+JSON.stringify (objectives));
 	assignmentList = "";
 	objectives.forEach (function (objective){
 		database.assignObjective (objective.id, group, objective.placement, function(e, o){
 			if (e)
 				console.log ("error assigning objective: "+e);
 			else{
-				console.log ("Assigned objective: "+o.title+" to group: "+group);
 				assignmentList = assignmentList + o.title + ", "
 			}
 		})
