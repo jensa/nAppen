@@ -86,27 +86,22 @@ function addNewAccount(newData, callback) {
 		if (o) {
 			callback('username-taken');
 		} else {
-			User.findOne({email:newData.email}, function(e, o) {
-				if (o) {
-					callback('email-taken');
-				} else {
-					bcrypt.hash(newData.password, 8, function(err, hash) {
-						var newUser = new User ({	
-													username : newData.username, 
-													password : hash, 
-													email : newData.email,
-													admin : newData.admin,
-													group : newData.group
-												});
-						newUser.save (function(error, user){
-							if (!error)
-								callback ("success");
-							else
-								callback ("failed to save user:"+user.username);
-						});
-					});
-				}
+			bcrypt.hash(newData.password, 8, function(err, hash) {
+				var newUser = new User ({	
+					username : newData.username, 
+					password : hash, 
+					email : newData.email,
+					admin : newData.admin,
+					group : newData.group
+				});
+				newUser.save (function(error, user){
+					if (!error)
+						callback ("success");
+					else
+						callback ("failed to save user:"+user.username);
+				});
 			});
+
 		}
 	});
 }
@@ -192,8 +187,10 @@ var validatePassword = function(plainPass, hashedPass, callback)
 }
 
 exports.getObjectives = function (usergroup, eventID, callback){
-	var filter = {eventID:eventID};
-	if (usergroup != "ALL")
+	var filter = {};
+	if (eventID)
+		filter.eventID=eventID;
+	if (usergroup != "ALL" && usergroup != null)
 		filter.group = usergroup;
 	Objective.find(filter).exec (callback);
 }
@@ -201,6 +198,17 @@ exports.getObjectives = function (usergroup, eventID, callback){
 exports.addObjective = function (o, callback){
 	var obj = new Objective (o);
 	obj.save (callback);
+}
+
+exports.assignObjective = function (objective, group, callback){
+	Objective.findById (objective, function (err, obj){
+		if (!err){
+			obj.group = group;
+			obj.save (callback);
+		}
+		else
+			callback (err, obj);
+	});
 }
 
 exports.getEvents = function (callback){
@@ -212,7 +220,7 @@ exports.getEvents = function (callback){
 
 exports.getEventURLByTitle = function (title, callback){
 	Event.findOne({title:title}, function (e, o){
-		if (e)
+		if (e || !o)
 			callback (e, o);
 		else
 			callback (e, o.url);

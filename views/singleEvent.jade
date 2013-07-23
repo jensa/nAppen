@@ -1,17 +1,18 @@
 extends base
 block flow
-
-	h2 Aktuellt uppdrag
-	if (objectives)
-		for obj in objectives
-			h2 #{obj.title}
-			p #{obj.description}
-	#imageUploadForm
-		form(id="imageUpload", action="uploadImage", method="post", enctype="multipart/form-data")
-			label Ladda upp bild
-			input(type="file", name="imageFile")
-			input(type="hidden", name="eventID", value=url)
-			input(type="submit", value="Ladda upp")
 	h2 #{title} - #{group}
 	p #{description}
+	h2 Aktuellt uppdrag
+	#currentMission
+		if (objectives)
+			for obj in objectives
+				h3 #{obj.title}
+				p #{obj.description}
+		#imageUploadForm
+			form(id="imageUpload", action="uploadImage", method="post", enctype="multipart/form-data")
+				label Ladda upp bild
+				input(type="file", name="imageFile")
+				input(type="hidden", name="eventID", value=url)
+				input(type="submit", value="Ladda upp")
+	
 

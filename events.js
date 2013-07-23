@@ -17,7 +17,7 @@ exports.createEvent = function (req, res){
 				};
 	database.addEvent (eventc, function (outcome) {
 		console.log (outcome);
-		helper.renderPage (req, res, 'adminview.jade', {title: 'Admin', message: outcome});
+		helper.renderAdminPage (req, res, database, {message: outcome});
 	});
 }
 
@@ -95,7 +95,6 @@ function showEvent (req, res, eventID, message) {
 }
 
 exports.createObjectives = function (req, res){
-	var group = req.param('group');
 	var title = req.param('objectiveTitle');
 	var description = req.param ('objectiveDescription');
 	var eventID = req.param ('eventID');
@@ -103,24 +102,52 @@ exports.createObjectives = function (req, res){
 	var obj = {
 		title:title,
 		description:description,
-		group:group,
 		eventID:eventID
 		};
 	database.addObjective(obj, function (e, o){
 		var message = "Uppdrag tillagt";
 		if (e)
 			message = e;
-		helper.renderPage (req, res, 'adminview.jade', {message:message});
+		helper.renderAdminPage (req, res, database, {message:message});
 	});
+}
+
+exports.getAllObjectives = function (callback){
+	database.getObjectives (null, null, function (e, o){
+		if (e)
+			callback (null);
+		else
+			callback (o);
+	});
+}
+
+exports.assignObjectives =function (req, res){
+	var objectives = req.param ('objectives');
+	objectives = [].concat (objectives);
+	var group = req.param ('group');
+	console.log ("objectives to assign: "+JSON.stringify (objectives));
+	assignmentList = "";
+	objectives.forEach (function (objective){
+		database.assignObjective (objective, group, function(e, o){
+			if (e)
+				console.log ("error assigning objective: "+e);
+			else{
+				console.log ("Assigned objective: "+o.title);
+				assignmentList = assignmentList + o.title + ", "
+			}
+		})
+	});
+	helper.renderAdminPage (req, res, database, 
+		{message:"Tilldelat uppdrag:"+assignmentList+" till n0llegrupp "+group});
+
 }
 
 exports.parseObjectiveFile = function (req, res){
 	var filename = req.files.objectiveFile.name;
-	// after uploading,
 
 	fs.readFile(req.files.objectiveFile.path, function (err, data) {
 		if (err)
-			helper.renderPage (req, res, 'adminview.jade', {message:err});
+			helper.renderAdminPage (req, res, database, {message:err});
 		var newObjectives = JSON.parse (data);
 		newObjectives.objectives.forEach (function (objective){
 			database.getEventURLByTitle (objective.event, function (e, o){
@@ -129,8 +156,7 @@ exports.parseObjectiveFile = function (req, res){
 					database.addObjective(objective);
 				}
 			});
-			
 		});
-		helper.renderPage (req, res, 'adminview.jade', {message:"Läste in filen"});
+		helper.renderAdminPage (req, res, database, {message:"Läste in filen"});
 	});
 }

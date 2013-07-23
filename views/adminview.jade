@@ -9,8 +9,9 @@ block flow
 			div
 				label Eventets beskrivning
 				textarea(name="eventDescription")
-			div
-				input(type="submit", name="eventSubmit", value="Skapa")
+			block skapaButton
+				div
+					input(type="submit", name="eventSubmit", value="Skapa")
 	#createObjectives
 		h2 Skapa uppdrag
 		form(id="createObjectivesForm", action="createObjectives", method="post")
@@ -26,29 +27,40 @@ block flow
 			div
 				label Uppdragets beskrivning
 				textarea(name="objectiveDescription")
-			div
-				label n0llegrupp
-				select(name="group")
-					option(value="A") A
-					option(value="B") B
-					option(value="C") C
-					option(value="D") D
-					option(value="E") E
-					option(value="F") F
-					option(value="G") G
-					option(value="H") H
-					option(value="I") I
-					option(value="J") J
-					option(value="K") K
-					option(value="L") L
-					option(value="M") M
-			div
-				input(type="submit", name="objectiveSubmit", value="Skapa")
+			block n0llegroups
+				div
+					label n0llegrupp
+					select(name="group")
+						option(value="A") A
+						option(value="B") B
+						option(value="C") C
+						option(value="D") D
+						option(value="E") E
+						option(value="F") F
+						option(value="G") G
+						option(value="H") H
+						option(value="I") I
+						option(value="J") J
+						option(value="K") K
+						option(value="L") L
+						option(value="M") M
+			block skapaButton
 		h2 Ladda upp uppdragsfil
 		form(id="uploadObjectiveJSON", action="uploadObjectiveFile", method="post", enctype="multipart/form-data")
 			div
 				input(type="file", name="objectiveFile")
 				input(type="submit", name="objectiveFileSubmit", value="Ladda upp")
+	#assignObjectives
+		h2 Tilldela uppdrag
+		form(id="createObjectivesForm", action="assignObjectives", method="post")
+			div
+				select(name="objectives", multiple="multiple")
+					if objectives
+						for objective in objectives
+							option(value=objective._id) #{objective.title}
+			block n0llegroups
+			div
+				input(type="submit", name="assignObjectiveSubmit", value="Tilldela")
 
 			
 	#createUser
@@ -63,30 +75,13 @@ block flow
 			div
 				label Email
 				input(type="text", name="email")
-			div
-				label n0llegrupp
-				select(name="group")
-					option(value="A") A
-					option(value="B") B
-					option(value="C") C
-					option(value="D") D
-					option(value="E") E
-					option(value="F") F
-					option(value="G") G
-					option(value="H") H
-					option(value="I") I
-					option(value="J") J
-					option(value="K") K
-					option(value="L") L
-					option(value="M") M
-					option(value="ALL") Alla (admin)
+			block n0llegroups
 			div
 				label Admin?
 				select(name="admin")
 					option(value="true") Sant
 					option(value="false") Falskt
-			div
-				input(type="submit", name="userSubmit", value="Skapa")
+			block skapaButton
 	#deleteeverything
 		h2 Ta bort allt från databasen
 		form(id="deleteeverything", action="DELETE", method="get")

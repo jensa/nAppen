@@ -28,13 +28,9 @@ function resizeCss (){
 	var bodywidth = "90%";
 	var center = false;
 	if (width > 500){
-		inputwidth = "300px";
 		bodywidth = "300px";
 		center = true;
 	}
-	$("input").css ("width", inputwidth);
-	$("select").css ("width", inputwidth);
-	$("textarea").css ("width", inputwidth);
 	$("body").css ("width", bodywidth);
 	if (center)
 		$("body").css("margin", "0px auto");
@@ -42,4 +38,7 @@ function resizeCss (){
 		$("body").css("margin", "0px");
 		$("body").css("margin-left", "1em");
 	}
+	$("input").css ("width", inputwidth);
+	$("select").css ("width", inputwidth);
+	$("textarea").css ("width", inputwidth);
 }
