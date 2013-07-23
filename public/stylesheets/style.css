@@ -99,3 +99,15 @@ input[type=submit]{
 	border: 3px solid #F400A1;
 }
 
+.objectAssignmentBox
+{
+	width: 20%;
+	display: inline-block;
+	border: 1px solid #F400A1;
+	margin-bottom: 4px;
+	margin-right: 1px;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+

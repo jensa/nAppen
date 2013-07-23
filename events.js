@@ -88,6 +88,7 @@ function showEvent (req, res, eventID, message) {
 		//det kanske blir jättejobbigt, men vafan
 		event.message = message;
 		database.getObjectives (userGroup, eventID, function (e,o){
+			console.log (JSON.stringify (o));
 			event.objectives = o;
 			helper.renderPage (req, res, 'singleEvent.jade', event);
 		});
@@ -120,25 +121,29 @@ exports.getAllObjectives = function (callback){
 			callback (o);
 	});
 }
-
+var assignmentsPerRequest = 10;
 exports.assignObjectives =function (req, res){
-	var objectives = req.param ('objectives');
-	objectives = [].concat (objectives);
+	var objectives = new Array ();
 	var group = req.param ('group');
+	for (var i = assignmentsPerRequest; i > 0; i--) {
+		var objectiveID = req.param ('objective'+i);
+		var placement = req.param ('placement'+i);
+		if (objectiveID && placement)
+			objectives.push ({id:objectiveID, placement:placement});
+	};
 	console.log ("objectives to assign: "+JSON.stringify (objectives));
 	assignmentList = "";
 	objectives.forEach (function (objective){
-		database.assignObjective (objective, group, function(e, o){
+		database.assignObjective (objective.id, group, objective.placement, function(e, o){
 			if (e)
 				console.log ("error assigning objective: "+e);
 			else{
-				console.log ("Assigned objective: "+o.title);
+				console.log ("Assigned objective: "+o.title+" to group: "+group);
 				assignmentList = assignmentList + o.title + ", "
 			}
 		})
 	});
-	helper.renderAdminPage (req, res, database, 
-		{message:"Tilldelat uppdrag:"+assignmentList+" till n0llegrupp "+group});
+	helper.renderAdminPage (req, res, database, {message:"TIlldelat uppdrag"});
 
 }
 

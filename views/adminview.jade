@@ -36,11 +36,27 @@ block flow
 	#assignObjectives
 		h2 Tilldela uppdrag
 		form(id="createObjectivesForm", action="assignObjectives", method="post")
-			div
-				select(name="objectives", multiple="multiple")
-					if objectives
-						for objective in objectives
-							option(value=objective._id) #{objective.title}
+			mixin selectObjective(num)
+				.objectAssignmentBox
+					div
+						label Uppdrag
+						select(name="objective"+num)
+								if objectives
+									for objective in objectives
+										option(value=objective._id) #{objective.title}
+					div
+						label Placering
+						input(type="number", name="placement"+num, value=num)
+			mixin selectObjective (1)
+			mixin selectObjective (2)
+			mixin selectObjective (3)
+			mixin selectObjective (4)
+			mixin selectObjective (5)
+			mixin selectObjective (6)
+			mixin selectObjective (7)
+			mixin selectObjective (8)
+			mixin selectObjective (9)
+			mixin selectObjective (10)
 			block n0llegroups
 				div
 					label n0llegrupp

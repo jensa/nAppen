@@ -1,6 +1,10 @@
 var bcrypt = require('bcrypt');
+
+// I think we can remove these
 var MongoDB = require('mongodb').Db;
 var Server = require('mongodb').Server;
+//******************************
+
 var mongoose = require('mongoose');
 
 var dbPort = 27017;
@@ -36,6 +40,7 @@ Event = mongoose.model ('events', eventSchema);
 var imageSchema = new mongoose.Schema ({
 	url : String,
 	eventID : String,
+	objective: String, // optional! I have no idea what I'm doing.
 	group : String
 });
 
@@ -44,11 +49,12 @@ Image = mongoose.model ('images', imageSchema);
 var objectiveSchema = new mongoose.Schema({
 	title : String,
 	description : String,
-	group : String,
-	eventID : String
+	eventID : String,
+	groups : [{group:String, placement:Number}]// the groups who has this assignment and the placement of it in that group. This could be bad...
 });
 
 Objective = mongoose.model ('objectives', objectiveSchema);
+
 
 /* login validation methods */
 
@@ -191,7 +197,7 @@ exports.getObjectives = function (usergroup, eventID, callback){
 	if (eventID)
 		filter.eventID=eventID;
 	if (usergroup != "ALL" && usergroup != null)
-		filter.group = usergroup;
+		filter.groups = {$elemMatch: {group:usergroup}}; // filter on group, use $elemMatch to filter on array elements
 	Objective.find(filter).exec (callback);
 }
 
@@ -200,10 +206,12 @@ exports.addObjective = function (o, callback){
 	obj.save (callback);
 }
 
-exports.assignObjective = function (objective, group, callback){
+exports.assignObjective = function (objective, group, placement, callback){
 	Objective.findById (objective, function (err, obj){
 		if (!err){
-			obj.group = group;
+			if (!obj.groups)
+				obj.groups = new Array ();
+			obj.groups.push ({group: group, placement:placement});
 			obj.save (callback);
 		}
 		else
