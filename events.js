@@ -102,12 +102,15 @@ function showEvent (req, res, eventID, message) {
 			listEvents (req, res, err);
 		if (event == undefined)
 			listEvents (req, res, err);
-		//TODO här: adda ajax till singleEvent.jade som laddar bilderna.
-		//det kanske blir jättejobbigt, men vafan
 		event.message = message;
 		database.getObjectives (userGroup, eventID, function (e,o){
 			event.objectives = o;
-			helper.renderPage (req, res, 'singleEvent.jade', event);
+			database.getImages (eventID, userGroup, function (e, images){
+				if (e)
+					console.log ("could not load any images: "+e);
+				event.images = images;
+				helper.renderPage (req, res, 'singleEvent.jade', event);
+			})
 		});
 	});
 }
