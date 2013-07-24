@@ -47,8 +47,8 @@ exports.handleCreateUserRequest = function (req, res){
 	});
 }
 
-function createUser (user, pwd, email, grp, admin, callback){
-	var data = {username: user, password:pwd, email:email, group:grp, admin:admin};
+function createUser (user, pwd, email, grp, dadmin, admin, callback){
+	var data = {username: user, password:pwd, email:email, group:grp, dadmin: dadmin, admin:admin};
 	database.createOrUpdate (data, function (status){
 		if (status == 'success'){
 			callback ({	title:'Användare skapad',
@@ -56,6 +56,7 @@ function createUser (user, pwd, email, grp, admin, callback){
 											email:email, 
 											password: pwd,
 											group: grp,
+											dadmin: dadmin,
 											admin:admin
 										});
 		} else {

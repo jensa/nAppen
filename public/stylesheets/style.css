@@ -45,7 +45,7 @@ select
 #navbar ul {
 	list-style-type: none;
 	display:inline-block;
-	margin-left: -27px;
+	margin-left: -25px;
 }
 
 #navbar ul li {
@@ -60,7 +60,7 @@ select
     color: #ffccfb;
     text-decoration: none;
     font-size: 18px;
-    padding: 7px;
+    padding: 5px;
 }
  
 #navbar li a:active {

@@ -26,6 +26,8 @@ exports.setRoutes = function (app){
 	app.post ('/makeuser', isLoggedIn, adminRole, userHandler.handleCreateUserRequest);
 	// renders admin view
 	app.get ('/admin', isLoggedIn, adminRole, admin);
+	// renders the almighty Daddmin menu
+	app.get ('/dadmin', isLoggedIn, daddeRole, dadmin);
 	// destroys session cookie and renders login form
 	app.get ('/logout', logout);
 	// Creates a new event using the parameters of the request
@@ -55,11 +57,22 @@ function admin(req, res){
 	helper.renderAdminPage (req, res, database, {});
 }
 
+function dadmin(req, res) {
+	helper.renderDadminPage (req, res, database, {});
+}
+
 //destroy cookies, redirect to root
 function logout (req, res){
 		res.clearCookie('username');
 		res.clearCookie('password');
 		req.session.destroy(function(e){ res.redirect('/');		});
+}
+
+function daddeRole (req, res, next) {
+	if (req.session.user.dadda)
+		next ();
+	else
+		res.redirect ('/');
 }
 
 //  check this sessions user for the admin attribute and call next if true, else redirect to root
@@ -69,6 +82,7 @@ function adminRole (req, res, next){
 	else
 		res.redirect('/');
 }
+
 // Check if this session has a user attached to it
 function isLoggedIn (req, res, next){
 	if (req.session.user != null)
@@ -76,23 +90,28 @@ function isLoggedIn (req, res, next){
 	else
 		res.redirect ('/login');
 }
+
 // Delete fucking everything, remake admin account
 function deleteall (req, res){
 	database.delAllRecords (function (e,o){
 		console.log ("deleted everything");
-		userHandler.createUser ("dkd", "dkd", "jensarv@gmail.com" , 
-		"ALL", true, function(data){
+		userHandler.createUser ("dad", "dad", "bystam@kth.se",
+			"M", true, false, function(data) {
+			userHandler.createUser ("dkd", "dkd", "jensarv@gmail.com" , 
+			"ALL", true, true, function(data){
 						console.log ("got user data");
 						helper.renderPage (req, res, 'login.jade', 	{
-								title:"Logga in", 
-								message:"Tog bort hela databasen. "+
-										"Återskapade adminkontot:" +
-										"Namn: "+data.user + 
-										"Pass: "+data.password +
-										"Email: "+data.email +
-										"Admin: "+data.admin
-								});
+							title:"Logga in", 
+							message:"Tog bort hela databasen. "+
+									"Återskapade adminkontot:" +
+									"Namn: "+data.user + 
+									"Pass: "+data.password +
+									"Email: "+data.email +
+									"Dadmin: "+data.dadmin +
+									"Admin: "+data.admin
+							});
 					});
+		});
 	});
 	
 }

@@ -1,5 +1,5 @@
 ﻿
-title="POSTEn - " + title
+title="nAppen " + title
 link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz', type='text/css')
 link(rel='stylesheet', href='./stylesheets/style.css')
 head
@@ -7,7 +7,7 @@ head
 body
 	block header
 		#header_title
-			h1 POSTEn - POrtabelt STödsystEm för n0llan
+			h1 nAppen
 		if (loggedin)
 			#navbar
 				ul
@@ -17,6 +17,9 @@ body
 						a(href='/event') Event
 					li
 						a(href='/logout') Logga ut
+					if (dadminRole)
+						li
+							a(href='/dadmin') Dadmin
 					if (adminrole)
 						li
 							a(href='/admin') Admin

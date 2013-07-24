@@ -1,6 +1,8 @@
 function renderPage (req, res, page, options) {
 	if (req.session.user)
 		options.loggedin = true;
+	if (getDadminRole (req))
+		options.dadminRole = true;
 	if (getAdminRole (req))
 		options.adminrole = true;
 	res.render (page, options);
@@ -31,6 +33,11 @@ exports.renderAdminPage = function (req, res, database, options){
 	});
 }
 
+// TODO implement this
+exports.renderDadminPage = function (req, res, database, options) {
+	renderAdminPage (req, res, database, options);
+}
+
 function getAdminRole (req){
 	var usr = req.session.user;
 	if (usr) {
@@ -38,4 +45,8 @@ function getAdminRole (req){
 			return true;
 	}
 	return false;
+}
+
+function getDadminRole (req) {
+	return true; // TODO implement this;
 }

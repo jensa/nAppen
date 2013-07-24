@@ -25,6 +25,7 @@ var userSchema = new mongoose.Schema({
 	username : String,
 	password : String,
 	email : String,
+	dadmin : Boolean,
 	admin : Boolean,
 	group : String
 });
@@ -97,6 +98,7 @@ function addNewAccount(newData, callback) {
 					username : newData.username, 
 					password : hash, 
 					email : newData.email,
+					dadmin : newData.dadmin,
 					admin : newData.admin,
 					group : newData.group
 				});
