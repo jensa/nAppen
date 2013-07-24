@@ -16,6 +16,8 @@ eventsHandler.init (database);
 exports.setRoutes = function (app){
 	// Event view, likely reached from link bar
 	app.get ('/event', isLoggedIn, eventsHandler.handleEventRequest);
+	// display the given image
+	app.get ('/image', isLoggedIn, eventsHandler.displayImage);
 	//Login view, Tries to log in using cookie, renders login form if none exists
 	app.get ('/login', userHandler.autoLogin);
 	// Authenticates a login request

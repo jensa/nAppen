@@ -296,6 +296,7 @@ exports.saveImage = function (img, callback){
 			console.log ("Error while saving image: " + e);
 	});
 }
+
 exports.getImages = function (eventID, group, callback){
 	Image.find ({eventID:eventID, group:group}).exec (callback);
 }

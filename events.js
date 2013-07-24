@@ -69,6 +69,12 @@ exports.uploadImage = function (req, res){
 	showEvent (req, res, eventID, "Laddade upp "+filename);
 }
 
+exports.displayImage = function (req, res) {
+	var imagePath = req.query.imagePath;
+	console.log(imagePath);
+	helper.renderPage (req, res, 'image.jade', {imagePath : imagePath});
+}
+
 function getFilename (balle){
 	return balle;
 }

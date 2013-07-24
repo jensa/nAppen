@@ -14,7 +14,7 @@ mixin objectiveBox(obj)
 					input(type="submit", value="Ladda upp")
 			for img in images
 				if img.objectiveID == obj._id
-					a(href=img.url)
+					a(href='/image?imagePath=' + img.url)
 						img.thumbnail(src=img.url, height="50px", width="50px")
 
 block flow

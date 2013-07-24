@@ -178,3 +178,9 @@ p.trigger:active{
 	margin: 5px;
 	border: 2px solid #F400A1;
 }
+
+.picture {
+	width: 100%;
+	border: 2px solid #F400A1;
+	margin-bottom: 5%;
+}
