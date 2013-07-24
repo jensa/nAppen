@@ -10,10 +10,13 @@ mixin objectiveBox(obj)
 					input(type="file", name="imageFile")
 					input(type="hidden", name="eventID", value=url)
 					input(type="hidden", name="eventTitle", value=title)
-					input(type="hidden", name="objective", value=obj)
+					input(type="hidden", name="objectiveID", value=obj._id)
 					input(type="submit", value="Ladda upp")
 			for img in images
-				img(src=img.url)
+				if img.objectiveID == obj._id
+					a(href=img.url)
+						img.thumbnail(src=img.url, height="50px", width="50px")
+
 block flow
 	h2 #{title} - #{group}
 	p #{description}

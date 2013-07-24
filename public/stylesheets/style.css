@@ -138,3 +138,8 @@ p.trigger:active{
 	border-width:1px;
 	padding: 10px;
 }
+
+.thumbnail {
+	margin: 5px;
+	border: 2px solid #F400A1;
+}

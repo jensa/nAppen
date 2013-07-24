@@ -40,7 +40,7 @@ Event = mongoose.model ('events', eventSchema);
 var imageSchema = new mongoose.Schema ({
 	url : String,
 	eventID : String,
-	objective: String, // optional! I have no idea what I'm doing.
+	objectiveID: String, // optional! I have no idea what I'm doing. wtf works even worse now /bystam
 	group : String
 });
 

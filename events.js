@@ -36,7 +36,7 @@ exports.handleEventRequest = function (req, res){
 exports.uploadImage = function (req, res){
 	var eventID = req.param('eventID');
 	var eventTitle = req.param('eventTitle');
-	var objective = req.param ('objective');
+	var objectiveID = req.param ('objectiveID');
 	var group = req.session.user.group;
 	var originalFilename = req.files.imageFile.name;
 	var filename = getFilename (originalFilename);
@@ -60,7 +60,7 @@ exports.uploadImage = function (req, res){
 	});
 	database.saveImage ({	url : urlPath,
 							eventID : eventID,
-							objective: objective, // optional! I have no idea what I'm doing.
+							objectiveID: objectiveID, // optional! I have no idea what I'm doing /jens wtf works even worse now /bystam
 							group : group
 						}, function (e, o){
 							if (e)
