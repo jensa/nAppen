@@ -1,15 +1,17 @@
 extends base
 mixin objectiveBox(obj)
-	h3 #{obj.title}
-	p #{obj.description}
-	#imageUploadForm
-		form(id="imageUpload", action="uploadImage", method="post", enctype="multipart/form-data")
-			label Ladda upp bild
-			input(type="file", name="imageFile")
-			input(type="hidden", name="eventID", value=url)
-			input(type="hidden", name="eventTitle", value=title)
-			input(type="hidden", name="assignment", value=obj)
-			input(type="submit", value="Ladda upp")
+	p.trigger #{obj.title}
+	.toggle_container
+		div
+			p #{obj.description}
+			#imageUploadForm
+				form(id="imageUpload", action="uploadImage", method="post", enctype="multipart/form-data")
+					label Ladda upp bild
+					input(type="file", name="imageFile")
+					input(type="hidden", name="eventID", value=url)
+					input(type="hidden", name="eventTitle", value=title)
+					input(type="hidden", name="assignment", value=obj)
+					input(type="submit", value="Ladda upp")
 block flow
 	h2 #{title} - #{group}
 	p #{description}

@@ -4,8 +4,6 @@ $(".eventblock").click(function(){
 		return false;
 });
 
-
-
 $(".eventblock").load (function (){
 	$(this).css ("background", "");
 });
@@ -44,3 +42,9 @@ function resizeCss (){
 	$("select").css ("width", inputwidth);
 	$("textarea").css ("width", inputwidth);
 }
+
+$(".toggle_container").hide();
+
+$("p.trigger").click(function(){
+    $(this).toggleClass("active").next().slideToggle("normal");
+});

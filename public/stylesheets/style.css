@@ -110,4 +110,31 @@ input[type=submit]{
 	padding-right: 2px;
 }
 
+p.trigger{
+	font-size: 18px;
+    margin-bottom:7px;
+    margin-top:-5px;
+    padding: 5px;
+}
+
+p.trigger:active{
+	color:blue;
+}
+
+.toggle_container{
+    margin-bottom:10px;
+}
+
+.toggle_container p{
+    margin:0px;
+}
+
+.toggle_container{
+    background:#f0f0f0;
+    clear: both;
+    font-size:100%;
+    border-style:solid;
+	border-width:1px;
+	padding: 10px;
+}
 

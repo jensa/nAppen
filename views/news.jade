@@ -1,5 +1,10 @@
 extends base
 block flow
-	p
-		|these are
-		|the news
+	h1 nØllegrupp Mango
+	- newsList = [{ headline : 'Jens kuk för liten. Torskar sin titel', text : 'You hear me. Jens är inte ens ledsen. Han förstår'}, { headline : 'Bystams kuk enorm. Behåller titel.', text : 'Däremot är appen helt cp'}];
+
+	h2 Nyheter
+	each news in newsList
+		p.trigger #{news.headline}
+		.toggle_container
+			p #{news.text}
