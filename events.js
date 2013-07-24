@@ -39,35 +39,36 @@ exports.uploadImage = function (req, res){
 	var objectiveID = req.param ('objectiveID');
 	var group = req.session.user.group;
 	var originalFilename = req.files.imageFile.name;
-	var filename = getFilename (originalFilename);
-
-	console.log ("image file: "+filename+", eventID: "+eventID);
-	var basedir = path.resolve (__dirname);
-	var urlPath = "/images/"+eventTitle+"/"+filename;
-	var folder = path.join (basedir, "public", "images", eventTitle);
-	var filePath = path.join(folder,filename);
-	fs.readFile(req.files.imageFile.path, function (err, data) {
-		nodefs.mkdir (folder, 0777, true, function(err){
-			if (err)
-				console.log ("Error mking dir: "+err);
-			else{
-				fs.writeFile(filePath, data, function (err) {
-					if (err)
-						console.log ("Error writing file: "+filePath);
-				});
-			}
+	getFilename (originalFilename, function (filename){
+		console.log ("image file: "+filename+", eventID: "+eventID);
+		var basedir = path.resolve (__dirname);
+		var urlPath = "/images/"+eventTitle+"/"+filename;
+		var folder = path.join (basedir, "public", "images", eventTitle);
+		var filePath = path.join(folder,filename);
+		fs.readFile(req.files.imageFile.path, function (err, data) {
+			nodefs.mkdir (folder, 0777, true, function(err){
+				if (err)
+					console.log ("Error mking dir: "+err);
+				else{
+					fs.writeFile(filePath, data, function (err) {
+						if (err)
+							console.log ("Error writing file: "+filePath);
+					});
+				}
+			});
 		});
+		database.saveImage ({	url : urlPath,
+								eventID : eventID,
+								objectiveID: objectiveID, // optional! I have no idea what I'm doing /jens wtf works even worse now /bystam
+								group : group
+							}, function (e, o){
+								if (e)
+									console.log ("error saving image url to db: "+newPath);
+							});
+		showEvent (req, res, eventID, "Laddade upp "+filename);
 	});
-	database.saveImage ({	url : urlPath,
-							eventID : eventID,
-							objectiveID: objectiveID, // optional! I have no idea what I'm doing /jens wtf works even worse now /bystam
-							group : group
-						}, function (e, o){
-							if (e)
-								console.log ("error saving image url to db: "+newPath);
-						});
-	showEvent (req, res, eventID, "Laddade upp "+filename);
 }
+
 
 exports.displayImage = function (req, res) {
 	var imagePath = req.query.imagePath;
@@ -75,8 +76,12 @@ exports.displayImage = function (req, res) {
 	helper.renderPage (req, res, 'image.jade', {imagePath : imagePath});
 }
 
-function getFilename (balle){
-	return balle;
+function getFilename (balle, callback){
+	var date = Date ();
+	database.getSmallHash (balle, function (e,hash){
+		var name = date.toUTCString + date.toTimeString + hash;
+		callback (name);
+	});
 }
 
 function listEvents (req, res, message){

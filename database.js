@@ -301,19 +301,24 @@ exports.getImages = function (eventID, group, callback){
 	Image.find ({eventID:eventID, group:group}).exec (callback);
 }
 
-// hash the event, get money
-function getNewEventURL (event, callback){
-	bcrypt.hash(""+event.title+event.description+event.group, null, null, function(err, hash) {
+//Get a 8-char hash from the given  string
+exports.getSmallHash = function (val, callback){
+	bcrypt.hash(val.toString (), null, null, function(err, hash) {
 		replaceUnsafe(hash, function (safeHash){
-			var shortHash = safeHash.substring (safeHash.length-11, safeHash.length-1);
+			var shortHash = safeHash.substring (safeHash.length-9, safeHash.length-1);
 			callback (err, shortHash);
 		});
 	});
 }
 
+// hash the event, get money
+function getNewEventURL (event, callback){
+	getSmallHash (""+event.title+event.description+event.group, callback);
+}
+
 function replaceUnsafe (str, callback){
 	var removed = str.split("/").join("");
-	if (removed.length < 10){
+	if (removed.length < 8){
 		removed = removed + "v11D9dD3r13T";
 	}
 	callback (removed);
