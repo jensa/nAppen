@@ -3,6 +3,41 @@
 color:red;
 }
 
+#title {
+	width: 100%;
+}
+
+#title #linus {
+	width: 25%;
+	float: left;
+}
+
+#title #linus img {
+	width: 70%;
+	margin: 10%;
+}
+
+#title #text {
+	width: 50%;
+	float: left;
+	text-align: center;
+	font-family: 'Freckle Face', cursive;
+	margin: -5px;
+}
+#title #text h1 {
+	font-size: 31px;
+}
+
+#title #shield {
+	width: 25%;
+	float: right;
+}
+
+#title #shield img {
+	width: 80%;
+	margin: 10%;
+}
+
 body 
 {
 	font-family: 'Yanone Kaffeesatz', serif;

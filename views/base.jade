@@ -1,13 +1,21 @@
 ﻿
 title="nAppen " + title
 link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz', type='text/css')
+link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Freckle+Face', type='text/css')
 link(rel='stylesheet', href='./stylesheets/style.css')
 head
 	meta(name="viewport", content="width=device-width, minimum-scale=1.0, maximum-scale=1.0");
 body
 	block header
-		#header_title
-			h1 nAppen
+		#title
+			#linus
+				img(src='static/linus.png')
+			#text
+				h1 nAppen
+			#shield
+				a(href='http://www.datasektionen.se/')
+					img(src='static/shield.png')
+		.clear
 		if (loggedin)
 			#navbar
 				ul
@@ -15,8 +23,6 @@ body
 						a(href='/news') Nyheter
 					li
 						a(href='/event') Event
-					li
-						a(href='/logout') Logga ut
 					if (dadminRole)
 						li
 							a(href='/dadmin') Dadmin
