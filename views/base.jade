@@ -9,17 +9,18 @@ body
 		#header_title
 			h1 POSTEn - POrtabelt STödsystEm för n0llan
 		if (loggedin)
-			#linkbar
-				tr
-					td 
-						a(href='/event') Event
-					td
+			#navbar
+				ul
+					li
 						a(href='/news') Nyheter
-					td
+					li
+						a(href='/event') Event
+					li
 						a(href='/logout') Logga ut
 					if (adminrole)
-						td
+						li
 							a(href='/admin') Admin
+			.clear
 	block errormessage
 		.errormsg	
 			p #{message}						
