@@ -1,5 +1,6 @@
 ﻿var helper = require ('./mods/helper');
 var fs = require('fs');
+var nodefs = require('node-fs');
 var database;
 
 nollegroups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"];
@@ -34,22 +35,31 @@ exports.handleEventRequest = function (req, res){
 exports.uploadImage = function (req, res){
 	var eventID = req.param('eventID');
 	var eventTitle = req.param('eventTitle');
+	var objective = req.param ('objective');
+	var group = req.session.user.group;
 	var filename = req.files.imageFile.name;
 	console.log ("image file: "+filename+", eventID: "+eventID);
 
 	var newPath = __dirname + "/public/images/" + eventTitle+ "/" +filename;
 	fs.readFile(req.files.imageFile.path, function (err, data) {
-		fs.writeFile(newPath, data, function (err) {
-			
+		nodefs.mkdir (newPath, mode, true, function(err){
+			if (err)
+				console.log ("Error mking dir: "+err);
+			else{
+				fs.writeFile(newPath, data, function (err) {
+					if (err)
+						console.log ("Error writing file: "+newPath);
+				});
+			}
 		});
-		
 	});
 	database.saveImage ({	url : newPath,
 							eventID : eventID,
-							objective: String, // optional! I have no idea what I'm doing.
-							group : String
+							objective: objective, // optional! I have no idea what I'm doing.
+							group : group
 						}, function (e, o){
-
+							if (e)
+								console.log ("error saving image url to db: "+newPath);
 						});
 	showEvent (req, res, eventID, "Laddade upp "+filename);
 }
@@ -92,12 +102,15 @@ function showEvent (req, res, eventID, message) {
 			listEvents (req, res, err);
 		if (event == undefined)
 			listEvents (req, res, err);
-		//TODO här: adda ajax till singleEvent.jade som laddar bilderna.
-		//det kanske blir jättejobbigt, men vafan
 		event.message = message;
 		database.getObjectives (userGroup, eventID, function (e,o){
 			event.objectives = o;
-			helper.renderPage (req, res, 'singleEvent.jade', event);
+			database.getImages (eventID, userGroup, function (e, images){
+				if (e)
+					console.log ("could not load any images: "+e);
+				event.images = images;
+				helper.renderPage (req, res, 'singleEvent.jade', event);
+			})
 		});
 	});
 }
