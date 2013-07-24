@@ -17,6 +17,15 @@ $(document).ready(function (){
 $(window).resize(function() {
 	resizeCss ();
 });
+$(".imageUploadForm").submit(function(){
+	var form = $(this);
+	$('input[type="file"]').each(function() {
+		var $this = $(this);
+		if ($this.val() && $this.val() != '') 
+			$.post("/uploadImage", $form.serialize());
+	});
+	return false;
+});
 
 function resetColors (){
 
