@@ -43,8 +43,9 @@ select
 }
 
 #navbar ul {
-    display:inline-block;
-    margin-left: -27px;
+	list-style-type: none;
+	display:inline-block;
+	margin-left: -27px;
 }
 
 #navbar ul li {
