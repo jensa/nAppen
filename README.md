@@ -22,7 +22,7 @@ npm install
 
 när den är klar, kör:
 
-mongod dbpath [MAPP DÄR DU VILL LÄGGA DATAN, VILKEN SOM HELST]
+mongod --dbpath [MAPP DÄR DU VILL LÄGGA DATAN, VILKEN SOM HELST] se http://docs.mongodb.org/manual/tutorial/manage-mongodb-processes/
 
 node foo.js
 
