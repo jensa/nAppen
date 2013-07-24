@@ -184,7 +184,10 @@ exports.delAllRecords = function(callback)
 {
 	Objective.remove({}, function (e, o){
 		Event.remove({}, function(e,o){
-			User.remove({}, callback);
+			User.remove({}, function(e,o){
+				Image.remove({}, callback);
+			});
+
 		});
 	});
 	

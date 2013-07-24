@@ -12,6 +12,8 @@ mixin objectiveBox(obj)
 					input(type="hidden", name="eventTitle", value=title)
 					input(type="hidden", name="objective", value=obj)
 					input(type="submit", value="Ladda upp")
+			for img in images
+				img(src=img.url)
 block flow
 	h2 #{title} - #{group}
 	p #{description}

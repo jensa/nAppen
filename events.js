@@ -38,24 +38,27 @@ exports.uploadImage = function (req, res){
 	var eventTitle = req.param('eventTitle');
 	var objective = req.param ('objective');
 	var group = req.session.user.group;
-	var filename = req.files.imageFile.name;
+	var originalFilename = req.files.imageFile.name;
+	var filename = getFilename (originalFilename);
+
 	console.log ("image file: "+filename+", eventID: "+eventID);
 	var basedir = path.resolve (__dirname);
-	var folder = path.join (basedir,"public","images",eventTitle);
-	var newPath = path.join(folder,filename);
+	var urlPath = "/images/"+eventTitle+"/"+filename;
+	var folder = path.join (basedir, "public", "images", eventTitle);
+	var filePath = path.join(folder,filename);
 	fs.readFile(req.files.imageFile.path, function (err, data) {
 		nodefs.mkdir (folder, 0777, true, function(err){
 			if (err)
 				console.log ("Error mking dir: "+err);
 			else{
-				fs.writeFile(newPath, data, function (err) {
+				fs.writeFile(filePath, data, function (err) {
 					if (err)
-						console.log ("Error writing file: "+newPath);
+						console.log ("Error writing file: "+filePath);
 				});
 			}
 		});
 	});
-	database.saveImage ({	url : newPath,
+	database.saveImage ({	url : urlPath,
 							eventID : eventID,
 							objective: objective, // optional! I have no idea what I'm doing.
 							group : group
@@ -64,6 +67,10 @@ exports.uploadImage = function (req, res){
 								console.log ("error saving image url to db: "+newPath);
 						});
 	showEvent (req, res, eventID, "Laddade upp "+filename);
+}
+
+function getFilename (balle){
+	return balle;
 }
 
 function listEvents (req, res, message){
