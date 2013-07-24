@@ -1,5 +1,6 @@
 ﻿var helper = require ('./mods/helper');
 var fs = require('fs');
+var path = require('path');
 var nodefs = require('node-fs');
 var database;
 
@@ -39,10 +40,11 @@ exports.uploadImage = function (req, res){
 	var group = req.session.user.group;
 	var filename = req.files.imageFile.name;
 	console.log ("image file: "+filename+", eventID: "+eventID);
-
-	var newPath = __dirname + "/public/images/" + eventTitle+ "/" +filename;
+	var basedir = path.resolve (__dirname);
+	var folder = path.join (basedir,"public","images",eventTitle);
+	var newPath = path.join(folder,filename);
 	fs.readFile(req.files.imageFile.path, function (err, data) {
-		nodefs.mkdir (newPath, mode, true, function(err){
+		nodefs.mkdir (folder, 0777, true, function(err){
 			if (err)
 				console.log ("Error mking dir: "+err);
 			else{
