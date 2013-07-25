@@ -302,7 +302,8 @@ exports.getImages = function (eventID, group, callback){
 }
 
 //Get a 8-char hash from the given  string
-exports.getSmallHash = function (val, callback){
+
+function getSmallHash (val, callback){
 	bcrypt.hash(val.toString (), null, null, function(err, hash) {
 		replaceUnsafe(hash, function (safeHash){
 			var shortHash = safeHash.substring (safeHash.length-9, safeHash.length-1);
@@ -310,6 +311,7 @@ exports.getSmallHash = function (val, callback){
 		});
 	});
 }
+exports.getSmallHash = getSmallHash;
 
 // hash the event, get money
 function getNewEventURL (event, callback){
