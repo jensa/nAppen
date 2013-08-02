@@ -10,6 +10,7 @@ var mongoose = require('mongoose');
 var dbPort = 27017;
 var dbHost = 'localhost';
 var dbName = 'test';
+var ALLGROUP = "ALL";
 
 /* establish the database connection */
 
@@ -58,7 +59,8 @@ Objective = mongoose.model ('objectives', objectiveSchema);
 
 var newsSchema = new mongoose.Schema ({
 	headline : String,
-	text : String
+	text : String,
+	group : String // ALL for global news
 });
 
 News = mongoose.model ('news', newsSchema);
@@ -212,7 +214,7 @@ exports.getObjectives = function (usergroup, eventID, callback){
 	var filter = {};
 	if (eventID)
 		filter.eventID=eventID;
-	if (usergroup != "ALL" && usergroup != null)
+	if (usergroup != ALLGROUP && usergroup != null)
 		filter.groups = {$elemMatch: {group:usergroup}}; // filter on group, use $elemMatch to filter on array elements
 	Objective.find(filter).exec (function (e, o){
 		if (e)
@@ -306,11 +308,11 @@ exports.getImages = function (eventID, group, callback){
 }
 
 exports.getNews = function(group, callback){
-	callback ();
+	News.find ({$or: [ { group : group }, { group : ALLGROUP }]}).exec (callback);
 }
 
-exports.saveNewsItem = function (headline, text, callback){
-
+exports.saveNewsItem = function (newsItem, callback){
+	News.save (newsItem, callback);
 }
 
 //Get a 8-char hash from the given  string

@@ -43,6 +43,8 @@ exports.setRoutes = function (app){
 	// TODO redesign objectives to not be bound to a specific group
 	// assigns the objectives in the request to the group specified in the request
 	app.post ('/assignObjectives', isLoggedIn, adminRole, eventsHandler.assignObjectives);
+	//Create a news post
+	app.post ('/createNewsItem', isLoggedIn, createNews);
 	// I don't know why the fuck I made this. This is retarded
 	app.get ('/fail', fail);
 	// DELETE FUCKING EVERYTHING FROM THE DB. also, recreate admin account
@@ -125,9 +127,33 @@ function fail (req, res){
 //Render the news page
 function news (req, res){
 	database.getNews (req.session.user.group, function (e, newsList){
-		helper.renderPage (req, res, 'news.jade', {title:'News', newsList : newsList})
+		if (e)
+			helper.renderPage (req, res, 'news.jade', {title:'News', message : e});
+		else
+			helper.renderPage (req, res, 'news.jade', {title:'News', newsList : newsList});
 	});
-	
+}
+
+function createNews (req, res){
+	var group = req.param ('group');
+	var admin = req.session.user.admin;
+	var dadmin = req.session.user.dadmin;
+	//Check permissions
+	if (!admin){
+		if (!dadmin)
+			res.redirect ('/');
+		if (req.session.user.group != group)
+			res.redirect ('/');
+	}
+	database.saveNewsItem ({header : req.param ('header'),
+							text : req.param ('text'),
+							group : group}, function (err, res){
+		if (admin)
+			helper.renderAdminPage (req, res, database, {message : err});
+		else
+			helper.renderDadminPage (req, res, database, {message : err});
+	});
+
 }
 
 // write out a raw 404 page with yolo swaggins. Maybe we should make something nice here
