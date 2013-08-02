@@ -2,7 +2,7 @@ function renderPage (req, res, page, options) {
 	if (req.session.user)
 		options.loggedin = true;
 	if (getDadminRole (req))
-		options.dadminRole = true;
+		options.dadminrole = true;
 	if (getAdminRole (req))
 		options.adminrole = true;
 	res.render (page, options);

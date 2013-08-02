@@ -45,6 +45,8 @@ exports.setRoutes = function (app){
 	app.post ('/assignObjectives', isLoggedIn, adminRole, eventsHandler.assignObjectives);
 	//Create a news post
 	app.post ('/createNewsItem', isLoggedIn, createNews);
+	//Render text ulpoad form for an objective
+	app.get ('/uploadText', isLoggedIn, showTextUploadForm);
 	// I don't know why the fuck I made this. This is retarded
 	app.get ('/fail', fail);
 	// DELETE FUCKING EVERYTHING FROM THE DB. also, recreate admin account
@@ -144,6 +146,7 @@ function createNews (req, res){
 			res.redirect ('/');
 		if (req.session.user.group != group)
 			res.redirect ('/');
+		group = req.session.user.group;
 	}
 	database.saveNewsItem ({header : req.param ('header'),
 							text : req.param ('text'),
@@ -154,6 +157,9 @@ function createNews (req, res){
 			helper.renderDadminPage (req, res, database, {message : err});
 	});
 
+}
+function showTextUploadForm (req, res){
+	res.redirect('/');
 }
 
 // write out a raw 404 page with yolo swaggins. Maybe we should make something nice here
