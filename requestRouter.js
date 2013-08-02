@@ -124,12 +124,15 @@ function fail (req, res){
 }
 //Render the news page
 function news (req, res){
-	helper.renderPage (req, res, 'news.jade', {title:'News'})
+	database.getNews (req.session.user.group, function (e, newsList){
+		helper.renderPage (req, res, 'news.jade', {title:'News', newsList : newsList})
+	});
+	
 }
 
 // write out a raw 404 page with yolo swaggins. Maybe we should make something nice here
 function balls (req, res){
 	res.writeHeader (404, {"Content-type":"text/html"});
-	res.end ("<html><body bgcolor=#F400A1><h3><center>BORTA!<br>"+
+	res.end ("<html><body bgcolor=#F400A1><h3><center>404 - BORTA!<br>"+
 		"<img src='https://sphotos-b.xx.fbcdn.net/hphotos-prn2/p480x480/969566_549584988426424_342740630_n.jpg'></center></h3></body></html>");
 }

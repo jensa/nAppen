@@ -20,6 +20,7 @@ app.configure(function(){
 	app.use(express.cookieParser());
 	app.use(express.session({ secret: 'super-duper-secret-secret' }));
 	app.use(express.methodOverride());
+	app.use(express.limit('10mb'));
 	
 });
 

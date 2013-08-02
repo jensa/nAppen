@@ -56,6 +56,13 @@ var objectiveSchema = new mongoose.Schema({
 
 Objective = mongoose.model ('objectives', objectiveSchema);
 
+var newsSchema = new mongoose.Schema ({
+	headline : String,
+	text : String
+});
+
+News = mongoose.model ('news', newsSchema);
+
 
 /* login validation methods */
 
@@ -296,6 +303,14 @@ exports.saveImage = function (img, callback){
 
 exports.getImages = function (eventID, group, callback){
 	Image.find ({eventID:eventID, group:group}).exec (callback);
+}
+
+exports.getNews = function(group, callback){
+	callback ();
+}
+
+exports.saveNewsItem = function (headline, text, callback){
+
 }
 
 //Get a 8-char hash from the given  string
