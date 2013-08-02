@@ -46,7 +46,9 @@ exports.setRoutes = function (app){
 	//Create a news post
 	app.post ('/createNewsItem', isLoggedIn, createNews);
 	//Render text ulpoad form for an objective
-	app.get ('/uploadText', isLoggedIn, showTextUploadForm);
+	app.get ('/uploadTextForm', isLoggedIn, showTextUploadForm);
+	//Save uploaded objective text and render the event
+	app.post('/saveObjectiveText', isLoggedIn, saveObjectiveText);
 	// I don't know why the fuck I made this. This is retarded
 	app.get ('/fail', fail);
 	// DELETE FUCKING EVERYTHING FROM THE DB. also, recreate admin account
@@ -159,7 +161,28 @@ function createNews (req, res){
 
 }
 function showTextUploadForm (req, res){
-	res.redirect('/');
+	var id = req.query.id;
+	var group = req.session.user.group;
+	database.getObjectiveTextByID (id, group, function (text){
+		helper.renderPage (req, res, 'textUpload.jade', {text:text, id:id});
+	});
+}
+
+function saveObjectiveText (req, res){
+	var group = req.session.user.group;
+	var text = req.param ('text');
+	var id = req.param ('id');
+	database.getObjectiveById (id, function (err, objective){
+		req.query.eventID = objective.eventID;
+		objective.groups.forEach (function (groupProperty){
+			if (groupProperty.group == group){
+				groupProperty.objectiveText = text;
+				objective.save (function (e, o){ if (e) console.log (e)});
+			}
+		});
+		eventsHandler.handleEventRequest (req, res);
+	});
+
 }
 
 // write out a raw 404 page with yolo swaggins. Maybe we should make something nice here

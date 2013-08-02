@@ -94,16 +94,22 @@ function showEvent (req, res, eventID, message) {
 			database.getImages (eventID, userGroup, function (e, images){
 				if (e)
 					console.log ("could not load any images: "+e);
-				prepareImages (event.objectives, images);
+				prepareImagesAndObjectiveTexts (event.objectives, images, userGroup);
 				helper.renderPage (req, res, 'singleEvent.jade', event);
 			})
 		});
 	});
 }
 
-function prepareImages (objectives, images) {
+function prepareImagesAndObjectiveTexts (objectives, images, group) {
 	imageHelper.setThumbnailPaths (images);
 	objectives.forEach (function (objective, objectiveIndex, objectives) {
+		//find the objective text (if any) for this group.
+		//jag hatar den här koden och allt den representerar
+		objective.groups.forEach (function (groupProps, index, grps){
+			if (groupProps.group == group)
+				objective.objectiveText = groupProps.objectiveText;
+		});
 		objective.images = new Array();
 		images.forEach (function (image, imageIndex, images) {
 			if (image.objectiveID == objective._id) {

@@ -52,7 +52,7 @@ var objectiveSchema = new mongoose.Schema({
 	title : String,
 	description : String,
 	eventID : String,
-	groups : [{group:String, placement:Number}]// the groups who has this assignment and the placement of it in that group. This could be bad...
+	groups : [{group:String, placement:Number, objectiveText:String}]// the groups who has this assignment, their objective text, and the placement of the objective in that group. This could be bad...
 });
 
 Objective = mongoose.model ('objectives', objectiveSchema);
@@ -309,6 +309,19 @@ exports.getImages = function (eventID, group, callback){
 
 exports.getNews = function(group, callback){
 	News.find ({$or: [ { group : group }, { group : ALLGROUP }]}).exec (callback);
+}
+//Given an objective ID, retrieves the current ObjectiveText for the given group
+exports.getObjectiveTextByID = function(id, group, callback){
+	Objective.findById(id, function (err, obj){
+		obj.groups.forEach (function (groupProperty){
+			if (groupProperty.group == group)
+				callback (groupProperty.objectiveText);
+		});
+	});
+}
+
+exports.getObjectiveById = function (id, callback){
+	Objective.findById (id, callback);
 }
 
 exports.saveNewsItem = function (newsItem, callback){
