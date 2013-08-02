@@ -312,7 +312,8 @@ exports.getNews = function(group, callback){
 }
 
 exports.saveNewsItem = function (newsItem, callback){
-	News.save (newsItem, callback);
+	var item = new News (newsItem);
+	item.save (callback);
 }
 
 //Get a 8-char hash from the given  string

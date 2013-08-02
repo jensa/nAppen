@@ -33,9 +33,8 @@ exports.renderAdminPage = function (req, res, database, options){
 	});
 }
 
-// TODO implement this
 exports.renderDadminPage = function (req, res, database, options) {
-	renderAdminPage (req, res, database, options);
+	renderPage (req, res, 'dadmin.jade', {});
 }
 
 function getAdminRole (req){

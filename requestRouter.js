@@ -73,7 +73,7 @@ function logout (req, res){
 }
 
 function daddeRole (req, res, next) {
-	if (req.session.user.dadda)
+	if (req.session.user.dadmin)
 		next ();
 	else
 		res.redirect ('/');
@@ -145,9 +145,9 @@ function createNews (req, res){
 		if (req.session.user.group != group)
 			res.redirect ('/');
 	}
-	database.saveNewsItem ({header : req.param ('header'),
+	database.saveNewsItem ({header : req.param ('headline'),
 							text : req.param ('text'),
-							group : group}, function (err, res){
+							group : group}, function (err, item) {
 		if (admin)
 			helper.renderAdminPage (req, res, database, {message : err});
 		else
