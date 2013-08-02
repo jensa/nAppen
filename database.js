@@ -291,10 +291,7 @@ exports.addEvent = function (ev, callback){
 
 exports.saveImage = function (img, callback){
 	var image = new Image (img);
-	image.save (function (e, o){
-		if (e)
-			console.log ("Error while saving image: " + e);
-	});
+	image.save (callback);
 }
 
 exports.getImages = function (eventID, group, callback){
