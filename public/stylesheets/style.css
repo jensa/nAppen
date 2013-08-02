@@ -157,21 +157,19 @@ p.trigger:active{
 	color: #F400A1;
 }
 
-.toggle_container{
-    margin-bottom:10px;
+.toggle_container p {
+    margin-bottom: 10px;
+    margin-top: -3px;
 }
 
-.toggle_container p{
-    margin:0px;
-}
-
-.toggle_container{
+.toggle_container {
     background:#f0f0f0;
     clear: both;
     font-size:100%;
     border-style:solid;
 	border-width:1px;
 	padding: 10px;
+    margin-bottom:10px;
 }
 
 .thumbnail {

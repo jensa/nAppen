@@ -94,9 +94,21 @@ function showEvent (req, res, eventID, message) {
 			database.getImages (eventID, userGroup, function (e, images){
 				if (e)
 					console.log ("could not load any images: "+e);
-				event.images = images;
+				prepareImages (event.objectives, images);
 				helper.renderPage (req, res, 'singleEvent.jade', event);
 			})
+		});
+	});
+}
+
+function prepareImages (objectives, images) {
+	imageHelper.setThumbnailPaths (images);
+	objectives.forEach (function (objective, objectiveIndex, objectives) {
+		objective.images = new Array();
+		images.forEach (function (image, imageIndex, images) {
+			if (image.objectiveID == objective._id) {
+				objective.images.push (image);
+			}
 		});
 	});
 }

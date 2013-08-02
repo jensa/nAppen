@@ -55,6 +55,15 @@ exports.saveImage = function (req, callback){
 	
 }
 
+exports.setThumbnailPaths = function (images) {
+	images.forEach (function (image, imageIndex, images) {
+		var url = image.url;
+		var filename = path.basename (url);
+		var thumbnail = path.dirname (url) + "/thumbs/" + filename;
+		image.thumbnail = thumbnail;
+	});
+}
+
 function saveThumbnail (file, callback){
 	var dest = getThumbnailFilename (file);
 	var command = "convert "+file+" -resize 50x50! "+dest;
