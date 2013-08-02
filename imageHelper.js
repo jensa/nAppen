@@ -58,9 +58,9 @@ exports.saveImage = function (req, callback){
 exports.setThumbnailPaths = function (images) {
 	images.forEach (function (image, imageIndex, images) {
 		var url = image.url;
-		var fileName = path.basename (url);
-		var thumbsName = path.dirname (url) + "/thumbs/" + fileName;
-		image.thumbnail = thumbsName;
+		var filename = path.basename (url);
+		var thumbnail = path.dirname (url) + "/thumbs/" + filename;
+		image.thumbnail = thumbnail;
 	});
 }
 
