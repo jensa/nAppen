@@ -1,0 +1,7 @@
+extends base
+block flow
+	h2 Text
+	form(action="saveObjectiveText", method="post")
+		textarea(name="text") #{text}
+		input(type="hidden", value=id, name="id");
+		input(type="submit", value="Uppdatera text")

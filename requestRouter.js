@@ -45,6 +45,10 @@ exports.setRoutes = function (app){
 	app.post ('/assignObjectives', isLoggedIn, adminRole, eventsHandler.assignObjectives);
 	//Create a news post
 	app.post ('/createNewsItem', isLoggedIn, createNews);
+	//Render text ulpoad form for an objective
+	app.get ('/uploadTextForm', isLoggedIn, showTextUploadForm);
+	//Save uploaded objective text and render the event
+	app.post('/saveObjectiveText', isLoggedIn, saveObjectiveText);
 	// I don't know why the fuck I made this. This is retarded
 	app.get ('/fail', fail);
 	// DELETE FUCKING EVERYTHING FROM THE DB. also, recreate admin account
@@ -144,6 +148,7 @@ function createNews (req, res){
 			res.redirect ('/');
 		if (req.session.user.group != group)
 			res.redirect ('/');
+		group = req.session.user.group;
 	}
 	database.saveNewsItem ({header : req.param ('headline'),
 							text : req.param ('text'),
@@ -152,6 +157,30 @@ function createNews (req, res){
 			helper.renderAdminPage (req, res, database, {message : err});
 		else
 			helper.renderDadminPage (req, res, database, {message : err});
+	});
+
+}
+function showTextUploadForm (req, res){
+	var id = req.query.id;
+	var group = req.session.user.group;
+	database.getObjectiveTextByID (id, group, function (text){
+		helper.renderPage (req, res, 'textUpload.jade', {text:text, id:id});
+	});
+}
+
+function saveObjectiveText (req, res){
+	var group = req.session.user.group;
+	var text = req.param ('text');
+	var id = req.param ('id');
+	database.getObjectiveById (id, function (err, objective){
+		req.query.eventID = objective.eventID;
+		objective.groups.forEach (function (groupProperty){
+			if (groupProperty.group == group){
+				groupProperty.objectiveText = text;
+				objective.save (function (e, o){ if (e) console.log (e)});
+			}
+		});
+		eventsHandler.handleEventRequest (req, res);
 	});
 
 }

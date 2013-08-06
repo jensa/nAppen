@@ -26,9 +26,10 @@ exports.handleCreateUserRequest = function (req, res){
 	var email = req.param('email');
 	var group = req.param('group');
 	var admin = false;
+	var dadmin = false;
 	if (req.param('admin') == 'true')
 		admin = true;
-	createUser (user, pwd, email, group, admin, function (data){
+	createUser (user, pwd, email, group, dadmin, admin, function (data){
 		if (data.error)
 			helper.renderPage (req, res, 'adminview.jade', 
 						{

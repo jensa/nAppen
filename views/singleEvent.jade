@@ -10,7 +10,11 @@ mixin objectiveBox(obj)
 					input(type="hidden", name="eventID", value=url)
 					input(type="hidden", name="eventTitle", value=title)
 					input(type="hidden", name="objectiveID", value=obj._id)
-					input(type="submit", value="Ladda upp")
+					input(type="submit", value="Ladda upp bild")
+			.textUploadForm
+				form(id="textUpload", action="uploadTextForm", method="get")
+					input(type="hidden", name="id", value=obj._id)
+					input(type="submit", value="Ladda upp text")
 			.tumbnails
 				for img in obj.images
 					a(href='/image?imagePath=' + img.url)
