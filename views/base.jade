@@ -34,9 +34,12 @@ body
 							a(href='/admin') Admin
 			.clear
 	block errormessage
-		.errormsg	
+		.errormsg
 			p #{message}						
 	block flow
+	block footer
+			#logout
+				a(href='/logout') Logga ut
 block scripts
 	script(src="http://code.jquery.com/jquery-1.10.1.min.js")
 	script(src="http://code.jquery.com/jquery-migrate-1.2.1.min.js")

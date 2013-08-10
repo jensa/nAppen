@@ -199,3 +199,10 @@ p.timestamp {
 	border: 2px solid #F400A1;
 	margin-bottom: 5%;
 }
+
+#logout {
+	font-size: 13px;
+	color: gray;
+}
+
+#logout 
