@@ -327,6 +327,7 @@ exports.getObjectiveById = function (id, callback){
 }
 
 exports.saveNewsItem = function (newsItem, callback){
+	console.log (JSON.stringify (newsItem));
 	var item = new News (newsItem);
 	item.save (callback);
 }
