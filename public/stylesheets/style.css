@@ -184,6 +184,11 @@ input[type=submit]{
     margin-bottom:10px;
 }
 
+p.timestamp {
+	font-size: 13px;
+	color: gray;
+}
+
 .thumbnail {
 	margin: 5px;
 	border: 2px solid #F400A1;

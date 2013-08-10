@@ -7,9 +7,7 @@ var mmm = require('mmmagic'),
 var mime = new Magic(mmm.MAGIC_MIME_TYPE);
 var database;
 var fs;
-
-moment.lang ('sv');
-exports.init = function (db, f){
+exports.init = function (db, f, moment){
 	database = db;
 	fs = f;
 }

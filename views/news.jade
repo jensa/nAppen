@@ -4,6 +4,7 @@ block flow
 
 	h2 Nyheter
 	each news in newsList
-		p.trigger #{news.headline}
+		p.trigger ▾  #{news.headline}
 		.toggle_container
 			p #{news.text}
+			p.timestamp Skrivet #{news.timestamp}

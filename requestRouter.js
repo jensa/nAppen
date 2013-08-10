@@ -3,9 +3,12 @@ var database = require('./database');
 var eventsHandler = require('./events');
 var helper = require ('./mods/helper')
 var userHandler = require('./userHandler');
+var moment = require ('moment');
+moment.lang ('sv');
 //we don't want to initialize the db twice, so send the database variable to all handlers
 userHandler.init (database);
-eventsHandler.init (database);
+eventsHandler.init (database, moment);
+
 
 //Here we define all the paths for the app
 // The path structure works like this:
@@ -127,10 +130,19 @@ function fail (req, res){
 //Render the news page
 function news (req, res){
 	database.getNews (req.session.user.group, function (e, newsList){
+		fixTimestamps (newsList);
 		if (e)
 			helper.renderPage (req, res, 'news.jade', {title:'News', message : e});
 		else
 			helper.renderPage (req, res, 'news.jade', {title:'News', newsList : newsList});
+	});
+}
+
+function fixTimestamps (list) {
+	list.forEach (function (entry) {
+		var date = entry._id.getTimestamp ();
+		var mom = moment (date);
+		entry.timestamp = mom.format ('ll');
 	});
 }
 
