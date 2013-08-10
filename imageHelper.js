@@ -1,15 +1,16 @@
 var nodefs = require('node-fs');
 var childproc = require('child_process');
-var moment = require ('moment');
 var path = require('path');
 var mmm = require('mmmagic'),
     Magic = mmm.Magic;
 var mime = new Magic(mmm.MAGIC_MIME_TYPE);
 var database;
 var fs;
+var moment;
 exports.init = function (db, f, moment){
 	database = db;
 	fs = f;
+	moment = moment;
 }
 
 exports.saveImage = function (req, callback){

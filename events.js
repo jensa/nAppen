@@ -5,10 +5,10 @@ var imageHelper;
 
 nollegroups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"];
 
-exports.init = function (db){
+exports.init = function (db, moment){
 	database = db;
 	imageHelper = require ('./imageHelper');
-	imageHelper.init (database,fs);
+	imageHelper.init (database, fs, moment);
 }
 
 exports.createEvent = function (req, res){
