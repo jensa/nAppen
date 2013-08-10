@@ -172,6 +172,7 @@ function showTextUploadForm (req, res){
 	var id = req.query.id;
 	var group = req.session.user.group;
 	database.getObjectiveTextByID (id, group, function (text){
+		console.log ("rendering: "+text);
 		helper.renderPage (req, res, 'textUpload.jade', {text:text, id:id});
 	});
 }
