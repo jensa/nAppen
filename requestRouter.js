@@ -51,10 +51,6 @@ exports.setRoutes = function (app){
 	app.post('/saveObjectiveText', isLoggedIn, saveObjectiveText);
 	// I don't know why the fuck I made this. This is retarded
 	app.get ('/fail', fail);
-	// DELETE FUCKING EVERYTHING FROM THE DB. also, recreate admin account
-	app.get ('/DELETE', isLoggedIn, adminRole, deleteall);
-	// create admin account, used for first timers. 
-	app.get ('/starttest', deleteall);
 	app.get('/', function (req, res){ res.redirect('/login')});
 	//404
 	app.get('*', balls);
