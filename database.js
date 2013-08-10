@@ -317,6 +317,7 @@ exports.getObjectiveTextByID = function(id, group, callback){
 			if (groupProperty.group == group)
 				callback (groupProperty.objectiveText);
 		});
+		callback ('');
 	});
 }
 
