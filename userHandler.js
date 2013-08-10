@@ -29,6 +29,8 @@ exports.handleCreateUserRequest = function (req, res){
 	var dadmin = false;
 	if (req.param('admin') == 'true')
 		admin = true;
+	if (req.param('dadmin') == 'true')
+		dadmin = true;
 	createUser (user, pwd, email, group, dadmin, admin, function (data){
 		if (data.error)
 			helper.renderPage (req, res, 'adminview.jade', 
@@ -44,6 +46,7 @@ exports.handleCreateUserRequest = function (req, res){
 													", lösenord: "+data.password+
 													", email: "+data.email+
 													", grupp: "+data.group+
+													", dadmin: "+data.dadmin+
 													", admin: "+data.admin});
 	});
 }

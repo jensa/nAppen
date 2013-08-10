@@ -70,5 +70,10 @@ function getAdminRole (req){
 }
 
 function getDadminRole (req) {
-	return true; // TODO implement this;
+	var usr = req.session.user;
+	if (usr){
+		if (usr.dadmin)
+			return true;
+	}
+	return false;
 }
