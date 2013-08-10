@@ -149,7 +149,7 @@ function fixTimestamps (list) {
 	list.forEach (function (entry) {
 		var date = entry._id.getTimestamp ();
 		var mom = moment (date);
-		entry.timestamp = mom.format ('ll');
+		entry.timestamp = mom.format ('LLLL');
 	});
 }
 
