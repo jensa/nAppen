@@ -34,10 +34,12 @@ exports.saveImage = function (req, callback){
 						fs.writeFile(filePath, data, function (err) {
 							if (err)
 								console.log ("Error writing file: "+filePath);
-							else{
-								saveThumbnail (filePath, function (){
-									saveToDB (urlPath, eventID, objectiveID, group, function (err, o){
-										callback (err, o);
+							else {
+								autoOrient (filePath, function () {
+									saveThumbnail (filePath, function () {
+										saveToDB (urlPath, eventID, objectiveID, group, function (err, o){
+											callback (err, o);
+										});
 									});
 								});
 							}
@@ -59,6 +61,13 @@ exports.setThumbnailPaths = function (images) {
 		var filename = path.basename (url);
 		var thumbnail = path.dirname (url) + "/thumbs/" + filename;
 		image.thumbnail = thumbnail;
+	});
+}
+
+function autoOrient (filePath, callback) {
+	var command = "convert " + filePath + " -auto-orient " + filePath;
+	childproc.exec(command, [], function (err, out, stderr){
+		callback ();
 	});
 }
 
