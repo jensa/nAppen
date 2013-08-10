@@ -146,14 +146,14 @@ input[type=submit]{
 	padding-right: 2px;
 }
 
-p.trigger{
+.trigger{
 	font-size: 18px;
     margin-bottom:7px;
     margin-top:-5px;
     padding: 5px;
 }
 
-p.trigger:active{
+.trigger:active{
 	color: #F400A1;
 }
 

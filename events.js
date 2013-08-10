@@ -47,7 +47,7 @@ exports.uploadImage = function (req, res){
 exports.displayImage = function (req, res) {
 	var imagePath = req.query.imagePath;
 	console.log(imagePath);
-	helper.renderPage (req, res, 'image.jade', {imagePath : imagePath});
+	helper.renderPage (req, res, 'image.jade', {imagePath : imagePath, title:"Bild"});
 }
 
 function listEvents (req, res, message){
