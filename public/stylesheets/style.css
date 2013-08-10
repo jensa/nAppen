@@ -113,9 +113,20 @@ select
 
 .eventblock
 {
-	margin-top: 3px;
+	padding: 0px 5px 0px 5px;
+	margin-bottom: 5px;
 	border: 3px solid #F400A1;
 }
+
+.eventblock h2 {
+	margin-top: 7px;
+	border-bottom: 1px solid #77006f;
+}
+
+.eventblock p {
+	font-size: 14px;
+}
+
 
 input[type=submit]{
 	border: 1px solid #777777;
