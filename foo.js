@@ -19,7 +19,7 @@ app.configure(function(){
 	//for some fucking reason we need to specify these
 	app.use(express.bodyParser());
 	app.use(express.cookieParser());
-	app.use(express.session({ secret: 'super-duper-secret-secret' }));
+	app.use(express.session({ secret: 'Fredrik Bystam, D10, har en liten snopp' }));
 	app.use(express.methodOverride());
 	app.use(express.limit('10mb'));
 	

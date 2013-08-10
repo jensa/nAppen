@@ -225,7 +225,7 @@ exports.getObjectives = function (usergroup, eventID, callback){
 			o.sort(function(a,b) {
 				if (a.groups[0]){
 					if (b.groups[0])
-						return a.groups[0].placement - b.groups[0].placement
+						return a.groups[0].placement - b.groups[0].placement;
 					else
 						return 1;
 				} else{

@@ -8,7 +8,7 @@ $(".eventblock").load (function (){
 	$(this).css ("background", "");
 });
 
-$('.objectAssignmentBox select').prop('selectedIndex', -1);
+$('#objectiveRow select').prop('selectedIndex', -1);
 
 $(document).ready(function (){
 	resizeCss ();

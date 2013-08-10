@@ -16,11 +16,12 @@ block flow
 		h2 Skapa uppdrag
 		form(id="createObjectivesForm", action="createObjectives", method="post")
 			div
-				label Event
-				select(name="eventID")
-					if events
-						for event in events
-							option(value=event.url) #{event.title}
+				mixin eventsSelect ()
+					label Event
+					select(name="eventID")
+						if events
+							for event in events
+								option(value=event.url) #{event.title}
 			div
 				label Updragets titel
 				input(type="text", name="objectiveTitle")
@@ -36,27 +37,27 @@ block flow
 	#assignObjectives
 		h2 Tilldela uppdrag
 		form(id="createObjectivesForm", action="assignObjectives", method="post")
-			mixin selectObjective(num)
-				.objectAssignmentBox
-					div
-						label Uppdrag
+			mixin ObjectiveRow (num)
+				#objectiveRow
+					.number
+						| Uppdragsplacering #{num}
+					.numberSelect
 						select(name="objective"+num)
-								if objectives
-									for objective in objectives
-										option(value=objective._id) #{objective.title}
-					div
-						label Placering
-						input(type="number", name="placement"+num, value=num)
-			mixin selectObjective (1)
-			mixin selectObjective (2)
-			mixin selectObjective (3)
-			mixin selectObjective (4)
-			mixin selectObjective (5)
-			mixin selectObjective (6)
-			mixin selectObjective (7)
-			mixin selectObjective (8)
-			mixin selectObjective (9)
-			mixin selectObjective (10)
+									if objectives
+										for objective in objectives
+											option(value=objective._id) #{objective.title}
+						input(type="hidden", name="placement"+num, value=num);
+					.clear
+			mixin ObjectiveRow (1)
+			mixin ObjectiveRow (2)
+			mixin ObjectiveRow (3)
+			mixin ObjectiveRow (4)
+			mixin ObjectiveRow (5)
+			mixin ObjectiveRow (6)
+			mixin ObjectiveRow (7)
+			mixin ObjectiveRow (8)
+			mixin ObjectiveRow (9)
+			mixin ObjectiveRow (10)
 			block n0llegroups
 				div
 					label n0llegrupp
@@ -74,6 +75,7 @@ block flow
 						option(value="K") K
 						option(value="L") L
 						option(value="M") M
+			mixin eventsSelect ()
 			div
 				input(type="submit", name="assignObjectiveSubmit", value="Tilldela")
 

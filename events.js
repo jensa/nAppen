@@ -161,6 +161,7 @@ exports.assignObjectives =function (req, res){
 	for (var i = assignmentsPerRequest; i > 0; i--) {
 		var objectiveID = req.param ('objective'+i);
 		var placement = req.param ('placement'+i);
+		console.log ("oid: "+objectiveID+", placement: "+placement);
 		if (objectiveID && placement)
 			objectives.push ({id:objectiveID, placement:placement});
 	};

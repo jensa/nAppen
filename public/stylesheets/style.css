@@ -213,3 +213,16 @@ p.timestamp {
 	border: 0px;
 	text-decoration: none;
 }
+
+.number {
+	float: left;
+}
+
+.numberSelect{
+	float: right;
+}
+
+#objectiveRow {
+	padding-bottom: 5px;
+	padding-top: 5px;
+}

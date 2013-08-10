@@ -13,12 +13,11 @@ mixin objectiveBox(obj)
 					input(type="submit", value="Ladda upp bild")
 			p #{obj.objectiveText}
 			.tumbnails
+				a(href='/uploadTextForm?id=' + obj._id)
+					img.thumbnail(src='static/text.png', height="50px", width="50px")
 				for img in obj.images
 					a(href='/image?imagePath=' + img.url)
 						img.thumbnail(src=img.thumbnail, height="50px", width="50px")
-				a(href='/uploadTextForm?id=' + obj._id)
-					img.thumbnail(src='static/text.png', height="50px", width="50px")
-
 block flow
 	h2 #{title}
 	p #{description}
