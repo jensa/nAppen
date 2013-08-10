@@ -2,9 +2,10 @@ var express = require('express')
 var app = express ();
 var router = require ('./requestRouter');
 
+var port = 80;
 app.configure(function(){
 	//I don't know what half of this does, but I guess it's all needed
-	app.set('port', 8000);
+	app.set('port', port);
 	//base dir where we put all .jade files
 	app.set('views', __dirname + '/views');
 	//set jade as templating engine
@@ -32,4 +33,4 @@ app.configure('development', function() {
 // This is where everything important happens
 router.setRoutes (app);
 
-app.listen(8000);
+app.listen(port);

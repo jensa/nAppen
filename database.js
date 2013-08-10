@@ -247,7 +247,18 @@ exports.assignObjective = function (objective, group, placement, callback){
 		if (!err){
 			if (!obj.groups)
 				obj.groups = new Array ();
-			obj.groups.push ({group: group, placement:placement});
+			var exists = false;
+			for (var i = obj.groups.length - 1; i >= 0; i--) {
+				groupProperties = obj.groups[i];
+				if (groupProperties.group == group){
+					//The property object already exists for this objective/group combo, just edit it.
+					groupProperties.placement = placement;
+					exists = true;
+					break;
+				}
+			};
+			if (!exists)
+				obj.groups.push ({group: group, placement:placement});
 			obj.save (callback);
 		}
 		else
