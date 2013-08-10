@@ -146,7 +146,7 @@ function createNews (req, res){
 			res.redirect ('/');
 		group = req.session.user.group;
 	}
-	database.saveNewsItem ({header : req.param ('headline'),
+	database.saveNewsItem ({headline : req.param ('headline'),
 							text : req.param ('text'),
 							group : group}, function (err, item) {
 		if (admin)

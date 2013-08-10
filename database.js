@@ -308,7 +308,8 @@ exports.getImages = function (eventID, group, callback){
 }
 
 exports.getNews = function(group, callback){
-	News.find ({$or: [ { group : group }, { group : ALLGROUP }]}).exec (callback);
+	// sort to have latest news first
+	News.find ({$or: [ { group : group }, { group : ALLGROUP }]}).sort ( { _id: -1 } ).exec (callback);
 }
 //Given an objective ID, retrieves the current ObjectiveText for the given group
 exports.getObjectiveTextByID = function(id, group, callback){
