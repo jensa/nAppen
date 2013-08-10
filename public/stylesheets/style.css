@@ -172,6 +172,7 @@ input[type=submit]{
     margin-bottom: 10px;
     margin-top: -3px;
     font-size: 15px;
+    white-space: pre-wrap;
 }
 
 .toggle_container {
@@ -201,8 +202,13 @@ p.timestamp {
 }
 
 #logout {
-	font-size: 13px;
-	color: gray;
+	margin: 3px;
+	float: right;
 }
 
-#logout 
+#logout a{
+	font-size: 14px;
+	color: gray;
+	border: 0px;
+	text-decoration: none;
+}
