@@ -7,10 +7,10 @@ var mime = new Magic(mmm.MAGIC_MIME_TYPE);
 var database;
 var fs;
 var moment;
-exports.init = function (db, f, moment){
+exports.init = function (db, f, mmt){
 	database = db;
 	fs = f;
-	moment = moment;
+	moment = mmt;
 }
 
 exports.saveImage = function (req, callback){
@@ -47,13 +47,24 @@ exports.saveImage = function (req, callback){
 						});
 					}
 				});
-			}
-			else{
+			} else {
 				callback ("Filen måste vara en bild!", null);
 			}
 		});
 	});
-	
+}
+
+exports.removeImage = function (url, callback) {
+	database.removeImage (url, function (eventID) {
+		var basedir = path.resolve (__dirname);
+		url = path.join (basedir, "public", url);
+		fs.unlink (url, function (error) {
+			fs.unlink (getThumbnailFilename (url), function (error) {
+				// TODO check errors?
+				callback (error, eventID);
+			})
+		})
+	});
 }
 
 exports.setThumbnailPaths = function (images) {

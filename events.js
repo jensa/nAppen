@@ -1,14 +1,13 @@
-﻿var helper = require ('./mods/helper');
-var fs = require('fs');
-var database;
+﻿var database;
 var imageHelper;
+var helper;
 
 nollegroups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"];
 
-exports.init = function (db, moment){
+exports.init = function (db, imgHelper, hlp){
 	database = db;
-	imageHelper = require ('./imageHelper');
-	imageHelper.init (database, fs, moment);
+	imageHelper = imgHelper;
+	helper = hlp;
 }
 
 exports.createEvent = function (req, res){
@@ -36,11 +35,20 @@ exports.handleEventRequest = function (req, res){
 
 exports.uploadImage = function (req, res){
 	imageHelper.saveImage (req, function (err, url){
-		if (err){
+		if (err)
 			showEvent (req, res, req.param('eventID'), err);
-		}
 		else
 			showEvent (req, res, req.param('eventID'), "Laddade upp bilden");
+	});
+}
+
+exports.removeImage = function (req, res) {
+	var url = req.param ('url');
+	imageHelper.removeImage (url, function (err, eventID) {
+		if (err)
+			showEvent (req, res, eventID, err);
+		else
+			showEvent (req, res, eventID, "Tog bort bilden");
 	});
 }
 

@@ -2,3 +2,7 @@ extends base
 block flow
 	a(href=imagePath)
 		img.picture(src=imagePath);
+	if (dadminrole)
+		form(action='/removeImage', method='post')
+			input(type='hidden', name='url', value=imagePath)
+			input(type='submit', value='Ta bort bilden');

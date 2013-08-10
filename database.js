@@ -303,6 +303,15 @@ exports.saveImage = function (img, callback){
 	image.save (callback);
 }
 
+exports.removeImage = function (url, callback) {
+	var image = Image.findOne ({url : url}, function (err, image) {
+		var eventID = image.eventID;
+		Image.remove ({_id : image._id}, function () {
+			callback (eventID);
+		});
+	});
+}
+
 exports.getImages = function (eventID, group, callback){
 	Image.find ({eventID:eventID, group:group}).exec (callback);
 }

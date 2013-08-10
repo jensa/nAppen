@@ -3,11 +3,16 @@ var database = require('./database');
 var eventsHandler = require('./events');
 var helper = require ('./mods/helper')
 var userHandler = require('./userHandler');
+var helper = require ('./mods/helper');
+var fs = require('fs');
+var imageHelper = require ('./imageHelper');
+
 var moment = require ('moment');
 moment.lang ('sv');
 //we don't want to initialize the db twice, so send the database variable to all handlers
+imageHelper.init (database, fs, moment);
 userHandler.init (database);
-eventsHandler.init (database, moment);
+eventsHandler.init (database, imageHelper, helper);
 
 
 //Here we define all the paths for the app
@@ -39,6 +44,8 @@ exports.setRoutes = function (app){
 	app.post ('/createEvent', isLoggedIn, adminRole, eventsHandler.createEvent);
 	// Deals with image upload requests (n0llan tries to upload images of momsen)
 	app.post ('/uploadImage', eventsHandler.uploadImage);
+	// remove an image
+	app.post ('/removeImage', isLoggedIn, daddeRole, eventsHandler.removeImage);
 	// Creates a new objective with the parameters of the request
 	app.post ('/createObjectives', isLoggedIn, adminRole, eventsHandler.createObjectives);
 	// Deals with saving uploaded JSON files as objectives
