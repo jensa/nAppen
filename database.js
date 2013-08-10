@@ -323,11 +323,16 @@ exports.getNews = function(group, callback){
 //Given an objective ID, retrieves the current ObjectiveText for the given group
 exports.getObjectiveTextByID = function(id, group, callback){
 	Objective.findById(id, function (err, obj){
-		obj.groups.forEach (function (groupProperty){
-			if (groupProperty.group == group)
+		var count = 0;
+		for (var i = obj.groups.length - 1; i >= 0; i--) {
+			var groupProperty = obj.groups[i];
+			if (groupProperty.group == group){
+				console.log ("returning text: "+groupProperty.objectiveText)
 				callback (groupProperty.objectiveText);
-		});
-		callback ('');
+			}
+		};
+		if (obj.groups.length < 1)
+			callback ('');
 	});
 }
 
