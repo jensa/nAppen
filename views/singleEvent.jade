@@ -11,14 +11,13 @@ mixin objectiveBox(obj)
 					input(type="hidden", name="eventTitle", value=title)
 					input(type="hidden", name="objectiveID", value=obj._id)
 					input(type="submit", value="Ladda upp bild")
-			.textUploadForm
-				form(id="textUpload", action="uploadTextForm", method="get")
-					input(type="hidden", name="id", value=obj._id)
-					input(type="submit", value="Ladda upp text")
+			p #{obj.objectiveText}
 			.tumbnails
 				for img in obj.images
 					a(href='/image?imagePath=' + img.url)
 						img.thumbnail(src=img.thumbnail, height="50px", width="50px")
+				a(href='/uploadTextForm?id=' + obj._id)
+					img.thumbnail(src='static/text.png', height="50px", width="50px")
 
 block flow
 	h2 #{title}
