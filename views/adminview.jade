@@ -48,16 +48,10 @@ block flow
 											option(value=objective._id) #{objective.title}
 						input(type="hidden", name="placement"+num, value=num);
 					.clear
-			mixin ObjectiveRow (1)
-			mixin ObjectiveRow (2)
-			mixin ObjectiveRow (3)
-			mixin ObjectiveRow (4)
-			mixin ObjectiveRow (5)
-			mixin ObjectiveRow (6)
-			mixin ObjectiveRow (7)
-			mixin ObjectiveRow (8)
-			mixin ObjectiveRow (9)
-			mixin ObjectiveRow (10)
+			- for (i=1; i<=30; i++) {
+				mixin ObjectiveRow (i)
+			- }
+
 			block n0llegroups
 				div
 					label n0llegrupp
