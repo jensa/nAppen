@@ -14,19 +14,19 @@ function renderPage (req, res, page, options) {
 
 function getNollegroupName (letter){
 	switch (letter){
-		case 'A': return 'and Onion, Sourcream'; break;
-		case 'B': return 'burgarchips, Cheese'; break;
-		case 'C': return 'Chips med tacosmak'; break;
-		case 'D': return 'Dillchips'; break;
-		case 'E': return 'Echo'; break;
-		case 'F': return 'Fucking grillchips'; break;
-		case 'G': return 'Gotländska chips'; break;
-		case 'H': return 'Hotel'; break;
-		case 'I': return 'India'; break;
-		case 'J': return 'Jalapenochips'; break;
-		case 'K': return 'Kilo'; break;
-		case 'L': return 'Lättsaltade chips'; break;
-		case 'M': return 'Mango'; break;
+		case 'A': return 'Action Man'; break;
+		case 'B': return 'Barbie'; break;
+		case 'C': return 'Care Bear'; break;
+		case 'D': return 'Domino'; break;
+		case 'E': return 'Etch-a-Sketch'; break;
+		case 'F': return 'Furby'; break;
+		case 'G': return 'Gameboy'; break;
+		case 'H': return 'Hopprep'; break;
+		case 'I': return 'Iprenmannen'; break;
+		case 'J': return 'Jack-in-the-Box'; break;
+		case 'K': return 'Kubiks Rub'; break;
+		case 'L': return 'LEGO'; break;
+		case 'M': return 'My Little Pony'; break;
 		case 'ALL': return 'Alla grupper'; break;
 	}
 }

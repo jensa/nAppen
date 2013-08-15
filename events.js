@@ -154,8 +154,8 @@ exports.getAllObjectives = function (callback){
 	});
 }
 
-var assignmentsPerRequest = 10;
-exports.assignObjectives =function (req, res){
+var assignmentsPerRequest = 30;
+exports.assignObjectives = function (req, res){
 	var objectives = new Array ();
 	var group = req.param ('group');
 	for (var i = assignmentsPerRequest; i > 0; i--) {
