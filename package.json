@@ -17,7 +17,8 @@
 					},
   "devDependencies": {},
   "scripts": 	{
-				"test": "foobear"
+				"test": "foobear",
+				"start": "node foo.js"
 				},
   "repository": {
 					"type": "git",
