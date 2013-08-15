@@ -1,7 +1,7 @@
-﻿{
+{
   "name": "foobear",
   "version": "0.0.0",
-  "description": "en app för nØllan lol",
+  "description": "en app för n0llan lol",
   "main": "foo.js",
   "dependencies": 	{
 					"bcrypt-nodejs": "~0.0.3",
