@@ -204,6 +204,5 @@ function saveObjectiveText (req, res){
 // write out a raw 404 page with yolo swaggins. Maybe we should make something nice here
 function balls (req, res){
 	res.writeHeader (404, {"Content-type":"text/html"});
-	res.end ("<html><body bgcolor=#F400A1><h3><center>404 - BORTA!<br>"+
-		"<img src='https://sphotos-b.xx.fbcdn.net/hphotos-prn2/p480x480/969566_549584988426424_342740630_n.jpg'></center></h3></body></html>");
+	res.end ("<html><body bgcolor=#F400A1><h1><center>404 - BORTA!<br></center></h1></body></html>");
 }
