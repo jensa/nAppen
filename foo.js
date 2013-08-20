@@ -22,12 +22,7 @@ app.configure(function(){
 	app.use(express.session({ secret: 'Fredrik Bystam, D10, har en liten snopp' }));
 	app.use(express.methodOverride());
 	app.use(express.limit('10mb'));
-	
-});
-
-//This is supposed to do something but I think its safe to remove it
-app.configure('development', function() {
-	app.use(express.errorHandler());
+	app.use(router.serverError);
 });
 
 // This is where everything important happens

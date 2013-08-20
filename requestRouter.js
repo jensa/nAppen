@@ -204,5 +204,15 @@ function saveObjectiveText (req, res){
 // write out a raw 404 page with yolo swaggins. Maybe we should make something nice here
 function balls (req, res){
 	res.writeHeader (404, {"Content-type":"text/html"});
-	res.end ("<html><body bgcolor=#F400A1><h1><center>404 - BORTA!<br></center></h1></body></html>");
+	res.end (errorHTML ("404 - BORTA!"));
+}
+
+exports.serverError = function(err, req, res, next){
+	console.error(err.stack);
+	res.writeHeader (500, {"Content-type":"text/html"});
+  	res.send(500, errorHTML ("Allt gick dåligt. Serverfel! :("));
+}
+
+function errorHTML (message){
+	return "<html><body bgcolor=#F400A1><h1><center>"+message+"<br></center></h1></body></html>"
 }
